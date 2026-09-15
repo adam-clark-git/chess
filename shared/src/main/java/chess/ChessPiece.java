@@ -29,25 +29,29 @@ public class ChessPiece {
     }
     @Override
     public String toString() {
+        String sPiece = "";
         if (type == PieceType.PAWN) {
-            return "p";
+            sPiece = "p";
         }
         if (type == PieceType.BISHOP) {
-            return "b";
+            sPiece = "b";
         }
         if (type == PieceType.ROOK) {
-            return "r";
+            sPiece = "r";
         }
         if (type == PieceType.QUEEN) {
-            return "q";
+            sPiece = "q";
         }
         if (type == PieceType.KING) {
-            return "k";
+            sPiece = "k";
         }
         if (type == PieceType.KNIGHT) {
-            return "n";
+            sPiece = "n";
         }
-        return "";
+        if (getTeamColor() == ChessGame.TeamColor.BLACK) {
+            sPiece = sPiece.toUpperCase();
+        }
+        return sPiece;
     }
 
     /**
