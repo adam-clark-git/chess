@@ -15,6 +15,18 @@ public class ChessPiece {
         this.pieceColor = pieceColor;
         this.type = type;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this){
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) return false;
+        var piece = (ChessPiece) obj;
+        if (piece.getTeamColor() == getTeamColor() && piece.getPieceType() == getPieceType()) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * The various different chess piece options
