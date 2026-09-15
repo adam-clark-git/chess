@@ -33,7 +33,7 @@ public class ChessBoard {
                 }
             }
         }
-        return false;
+        return true;
     }
     @Override
     public String toString() {
@@ -108,6 +108,5 @@ public class ChessBoard {
         addPiece(new ChessPosition(row, 6), new ChessPiece(color, ChessPiece.PieceType.BISHOP));
         addPiece(new ChessPosition(row, 7), new ChessPiece(color, ChessPiece.PieceType.KNIGHT));
         addPiece(new ChessPosition(row, 8), new ChessPiece(color, ChessPiece.PieceType.ROOK));
-        System.out.println(toString());
     }
 }
