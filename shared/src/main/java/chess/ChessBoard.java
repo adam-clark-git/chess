@@ -11,11 +11,23 @@ public class ChessBoard {
     public ChessBoard() {
 
     }
-    public boolean equals(ChessBoard otherBoard) {
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this){
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) return false;
+        var board = (ChessBoard) obj;
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 var position = new ChessPosition(i,j);
-                if (!otherBoard.getPiece(position).equals(getPiece(position))) {
+                if (board.getPiece(position) == null && getPiece(position) == null) {
+                    continue;
+                }
+                if (board.getPiece(position) == null) {
+                    return false;
+                }
+                if (!board.getPiece(position).equals(getPiece(position))) {
                     return false;
                 }
             }
