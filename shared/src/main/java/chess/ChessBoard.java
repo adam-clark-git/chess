@@ -16,6 +16,7 @@ public class ChessBoard {
         if (obj == this){
             return true;
         }
+
         if (obj == null || getClass() != obj.getClass()) return false;
         var board = (ChessBoard) obj;
         for (int i = 1; i <= 8; i++) {
@@ -33,6 +34,22 @@ public class ChessBoard {
             }
         }
         return false;
+    }
+    @Override
+    public String toString() {
+        String visualization= "";
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                if (getPiece(new ChessPosition(i, j)) == null) {
+                    visualization += "  ";
+                }
+                else {
+                    visualization += getPiece(new ChessPosition(i,j)).toString() + " ";
+                }
+            }
+            visualization += "\n";
+        }
+        return visualization;
     }
 
     /**
@@ -91,5 +108,6 @@ public class ChessBoard {
         addPiece(new ChessPosition(row, 6), new ChessPiece(color, ChessPiece.PieceType.BISHOP));
         addPiece(new ChessPosition(row, 7), new ChessPiece(color, ChessPiece.PieceType.KNIGHT));
         addPiece(new ChessPosition(row, 8), new ChessPiece(color, ChessPiece.PieceType.ROOK));
+        System.out.println(toString());
     }
 }
