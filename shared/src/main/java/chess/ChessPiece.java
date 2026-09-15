@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -93,6 +94,88 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        if (type == PieceType.ROOK) {
+            return rookMoves(board, myPosition);
+        }
+        return null;
+    }
+    private Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        var moves = new ArrayList<ChessMove>();
+        int dir = 0;
+        ChessMove move;
+        while (true) {
+            dir++;
+            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow()+dir, myPosition.getColumn()));
+            if (isMoveValid(board, move)) {
+                moves.add(move);
+                if (isMoveCapture(board, move)) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        dir = 0;
+        while (true) {
+            dir--;
+            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow()+dir, myPosition.getColumn()));
+            if (isMoveValid(board, move)) {
+                moves.add(move);
+                if (isMoveCapture(board, move)) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        dir = 0;
+        while (true) {
+            dir++;
+            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow(), myPosition.getColumn()+dir));
+            if (isMoveValid(board, move)) {
+                moves.add(move);
+                if (isMoveCapture(board, move)) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+
+        }
+        dir = 0;
+        while (true) {
+            dir--;
+            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow(), myPosition.getColumn()+dir));
+            if (isMoveValid(board, move)) {
+                moves.add(move);
+                if (isMoveCapture(board, move)) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        return moves;
+    }
+    private boolean isMoveValid(ChessBoard board, ChessMove move) {
+        var end = move.getEndPosition();
+        if (end.getColumn() > 8 || end.getColumn() < 1 || end.getRow() > 8 || end.getRow() < 1) {
+            return false;
+        }
+        if (board.getPiece(end) != null & board.getPiece(end).getTeamColor() == pieceColor) {
+            return false;
+        }
+        return true;
+    }
+    private boolean isMoveCapture(ChessBoard board, ChessMove move) {
+        var end = move.getEndPosition();
+        if (board.getPiece(end) != null & board.getPiece(end).getTeamColor() != pieceColor) {
+            return true;
+        }
+        return false;
     }
 }
