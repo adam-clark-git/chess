@@ -19,7 +19,7 @@ public class ChessMove {
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition) {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
-        this.promotionPiece = ChessPiece.PieceType.QUEEN;
+        this.promotionPiece = null;
     }
 
     /**
