@@ -94,88 +94,26 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        PieceMoves moves = new PieceMoves(board, myPosition);
         if (type == PieceType.ROOK) {
-            return rookMoves(board, myPosition);
+            return moves.getRookMoves();
+        }
+        else if (type == PieceType.BISHOP) {
+            return moves.getBishopMoves();
+        }
+        else if (type == PieceType.QUEEN) {
+            return moves.getBishopMoves();
+        }
+        else if (type == PieceType.KING) {
+            return moves.getBishopMoves();
+        }
+        else if (type == PieceType.KNIGHT) {
+            return moves.getBishopMoves();
+        }
+        else if (type == PieceType.PAWN) {
+            return moves.getBishopMoves();
         }
         return null;
     }
-    private Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        var moves = new ArrayList<ChessMove>();
-        int dir = 0;
-        ChessMove move;
-        while (true) {
-            dir++;
-            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow()+dir, myPosition.getColumn()));
-            if (isMoveValid(board, move)) {
-                moves.add(move);
-                if (isMoveCapture(board, move)) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
-        dir = 0;
-        while (true) {
-            dir--;
-            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow()+dir, myPosition.getColumn()));
-            if (isMoveValid(board, move)) {
-                moves.add(move);
-                if (isMoveCapture(board, move)) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
-        dir = 0;
-        while (true) {
-            dir++;
-            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow(), myPosition.getColumn()+dir));
-            if (isMoveValid(board, move)) {
-                moves.add(move);
-                if (isMoveCapture(board, move)) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
 
-        }
-        dir = 0;
-        while (true) {
-            dir--;
-            move = new ChessMove(myPosition,new ChessPosition(myPosition.getRow(), myPosition.getColumn()+dir));
-            if (isMoveValid(board, move)) {
-                moves.add(move);
-                if (isMoveCapture(board, move)) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
-        return moves;
-    }
-    private boolean isMoveValid(ChessBoard board, ChessMove move) {
-        var end = move.getEndPosition();
-        if (end.getColumn() > 8 || end.getColumn() < 1 || end.getRow() > 8 || end.getRow() < 1) {
-            return false;
-        }
-        if (board.getPiece(end) != null & board.getPiece(end).getTeamColor() == pieceColor) {
-            return false;
-        }
-        return true;
-    }
-    private boolean isMoveCapture(ChessBoard board, ChessMove move) {
-        var end = move.getEndPosition();
-        if (board.getPiece(end) != null & board.getPiece(end).getTeamColor() != pieceColor) {
-            return true;
-        }
-        return false;
-    }
 }
