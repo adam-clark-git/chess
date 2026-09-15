@@ -27,6 +27,28 @@ public class ChessPiece {
         }
         return false;
     }
+    @Override
+    public String toString() {
+        if (type == PieceType.PAWN) {
+            return "p";
+        }
+        if (type == PieceType.BISHOP) {
+            return "b";
+        }
+        if (type == PieceType.ROOK) {
+            return "r";
+        }
+        if (type == PieceType.QUEEN) {
+            return "q";
+        }
+        if (type == PieceType.KING) {
+            return "k";
+        }
+        if (type == PieceType.KNIGHT) {
+            return "n";
+        }
+        return "";
+    }
 
     /**
      * The various different chess piece options
