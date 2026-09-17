@@ -195,6 +195,7 @@ public class PieceMoves {
         return moves;
     }
 
+
     public List<ChessMove> getPawnMoves() {
         int mult = 1;
         if (board.getColor(myPosition) == ChessGame.TeamColor.BLACK) {
@@ -205,22 +206,28 @@ public class PieceMoves {
         do {
             move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(mult), myPosition.getColumn()+(x)));
             if (isMoveValid(board, move) && isMoveCapture(board,move)) {
-                moves.add(move);
+                moveAndPromote(move);
             }
             x = x * -1;
         } while (x != 1);
         move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(mult), myPosition.getColumn()));
         if (isMoveValid(board, move) && !isMoveCapture(board,move)) {
-            moves.add(move);
+            moveAndPromote(move);
+            move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(2*mult), myPosition.getColumn()));
+            if (isMoveValid(board, move) && !isMoveCapture(board,move) && !board.getPiece(move.getStartPosition()).checkMoved()) {
+                if (move.getStartPosition().getRow() == 2|| move.getStartPosition().getRow() == 7) {
+                    moves.add(move);
+                }
+            }
         }
-        move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(2*mult), myPosition.getColumn()));
-        if (isMoveValid(board, move) && !isMoveCapture(board,move) && !board.getPiece(move.getEndPosition()).checkMoved()) {
-            moves.add(move);
+        for (ChessMove movin : moves) {
+            System.out.println(movin.getEndPosition().toString());
         }
         return moves;
         // Implement En Passant Later
         // Implement Promotion Later
     }
+
 
     private void straightMoves(BiFunction<Direction,Integer,ChessPosition> movement) {
         ChessMove move;
@@ -254,5 +261,20 @@ public class PieceMoves {
             return true;
         }
         return false;
+    }
+    private void moveAndPromote(ChessMove move) {
+        if (move.getEndPosition().getRow() == 8 || move.getEndPosition().getRow() == 1) {
+            ChessMove newMove;
+            for (var promotion:  ChessPiece.PieceType.values()) {
+                if (promotion == ChessPiece.PieceType.PAWN || promotion == ChessPiece.PieceType.KING) {
+                    continue;
+                }
+                newMove = new ChessMove(move.getStartPosition(), move.getEndPosition(), promotion);
+                moves.add(newMove);
+            }
+        }
+        else {
+            moves.add(move);
+        }
     }
 }
