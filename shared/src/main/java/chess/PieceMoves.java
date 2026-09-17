@@ -1,13 +1,11 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class PieceMoves {
-    List<ChessMove> moves = new ArrayList<ChessMove>();
+    List<ChessMove> moves = new ArrayList<>();
     ChessBoard board;
     ChessPosition myPosition;
     public PieceMoves(ChessBoard board, ChessPosition myPosition) {
@@ -23,7 +21,7 @@ public class PieceMoves {
     }
 
     public List<ChessMove> getBishopMoves() {
-        moves =  new ArrayList<ChessMove>();
+        moves =  new ArrayList<>();
         BiFunction<Direction, Integer, ChessPosition> movement = (dir, magnitude) -> {
             ChessPosition end;
             if (dir == Direction.NORTH) {
@@ -44,7 +42,7 @@ public class PieceMoves {
         return moves;
     }
     public List<ChessMove> getRookMoves() {
-        moves = new ArrayList<ChessMove>();
+        moves = new ArrayList<>();
         BiFunction<Direction, Integer, ChessPosition> movement = (dir, magnitude) -> {
             ChessPosition end;
             if (dir == Direction.NORTH) {
@@ -65,7 +63,7 @@ public class PieceMoves {
         return moves;
     }
     public List<ChessMove> getQueenMoves() {
-        moves = new ArrayList<ChessMove>();
+        moves = new ArrayList<>();
         BiFunction<Direction, Integer, ChessPosition> movementRook = (dir, magnitude) -> {
             ChessPosition end;
             if (dir == Direction.NORTH) {
@@ -103,7 +101,7 @@ public class PieceMoves {
         return moves;
     }
     public List<ChessMove> getKnightMoves() {
-        moves = new ArrayList<ChessMove>();
+        moves = new ArrayList<>();
         BiFunction<Direction, Integer, ChessPosition> movement1 = (dir, magnitude) -> {
             ChessPosition end;
             if (magnitude > 1) {
@@ -149,7 +147,7 @@ public class PieceMoves {
         return moves;
     }
     public List<ChessMove> getKingMoves() {
-        moves = new ArrayList<ChessMove>();
+        moves = new ArrayList<>();
         BiFunction<Direction, Integer, ChessPosition> movement1 = (dir, magnitude) -> {
             ChessPosition end;
             if (magnitude > 1) {
@@ -220,9 +218,6 @@ public class PieceMoves {
                 }
             }
         }
-        for (ChessMove movin : moves) {
-            System.out.println(movin.getEndPosition().toString());
-        }
         return moves;
         // Implement En Passant Later
         // Implement Promotion Later
@@ -250,17 +245,11 @@ public class PieceMoves {
         if (end.getColumn() > 8 || end.getColumn() < 1 || end.getRow() > 8 || end.getRow() < 1) {
             return false;
         }
-        if (board.getPiece(end) != null && board.getColor(end) == board.getColor(move.getStartPosition())) {
-            return false;
-        }
-        return true;
+        return board.getPiece(end) != null && board.getColor(end) == board.getColor(move.getStartPosition());
     }
     private boolean isMoveCapture(ChessBoard board, ChessMove move) {
         var end = move.getEndPosition();
-        if (board.getPiece(end) != null && board.getColor(end) != board.getColor(move.getStartPosition())) {
-            return true;
-        }
-        return false;
+        return board.getPiece(end) != null && board.getColor(end) != board.getColor(move.getStartPosition());
     }
     private void moveAndPromote(ChessMove move) {
         if (move.getEndPosition().getRow() == 8 || move.getEndPosition().getRow() == 1) {
