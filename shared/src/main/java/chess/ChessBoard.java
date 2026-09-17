@@ -81,6 +81,12 @@ public class ChessBoard {
         }
         return board[position.getRow()-1][position.getColumn()-1];
     }
+    public ChessGame.TeamColor getColor(ChessPosition position) {
+        if (board[position.getRow()-1][position.getColumn()-1] == null) {
+            return null;
+        }
+        return board[position.getRow()-1][position.getColumn()-1].getTeamColor();
+    }
 
     /**
      * Sets the board to the default starting board
