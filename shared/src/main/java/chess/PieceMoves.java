@@ -66,8 +66,40 @@ public class PieceMoves {
     }
     public List<ChessMove> getQueenMoves() {
         moves = new ArrayList<ChessMove>();
-        getRookMoves();
-        getBishopMoves();
+        BiFunction<Direction, Integer, ChessPosition> movementRook = (dir, magnitude) -> {
+            ChessPosition end;
+            if (dir == Direction.NORTH) {
+                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn());
+            }
+            else if (dir == Direction.SOUTH) {
+                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn());
+            }
+            else if (dir == Direction.EAST) {
+                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+magnitude);
+            }
+            else {
+                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-magnitude);
+            }
+            return end;
+        };
+        BiFunction<Direction, Integer, ChessPosition> movementBishop = (dir, magnitude) -> {
+            ChessPosition end;
+            if (dir == Direction.NORTH) {
+                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn()+magnitude);
+            }
+            else if (dir == Direction.SOUTH) {
+                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn()-magnitude);
+            }
+            else if (dir == Direction.EAST) {
+                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn()+magnitude);
+            }
+            else {
+                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn()-magnitude);
+            }
+            return end;
+        };
+        straightMoves(movementRook);
+        straightMoves(movementBishop);
         return moves;
     }
     public List<ChessMove> getKnightMoves() {
