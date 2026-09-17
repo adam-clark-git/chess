@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -24,7 +25,10 @@ public class ChessPiece {
         }
         if (obj == null || getClass() != obj.getClass()) return false;
         var piece = (ChessPiece) obj;
-        return piece.getTeamColor() == getTeamColor() && piece.getPieceType() == getPieceType();
+        if (piece.getTeamColor() == getTeamColor() && piece.getPieceType() == getPieceType()) {
+            return true;
+        }
+        return false;
     }
     @Override
     public String toString() {
