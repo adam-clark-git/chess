@@ -13,6 +13,7 @@ import java.util.Objects;
 public class ChessPiece {
     private final ChessGame.TeamColor pieceColor;
     private final PieceType type;
+    private boolean hasMoved = false;
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
         this.type = type;
@@ -93,6 +94,12 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
+    public void updateMove() {
+        hasMoved = true;
+    }
+    public boolean checkMoved() {
+        return hasMoved;
+    }
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         PieceMoves moves = new PieceMoves(board, myPosition);
         if (type == PieceType.ROOK) {
