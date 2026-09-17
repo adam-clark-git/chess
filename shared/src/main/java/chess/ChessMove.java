@@ -21,7 +21,18 @@ public class ChessMove {
         this.endPosition = endPosition;
         this.promotionPiece = null;
     }
-
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this){
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) return false;
+        var move = (ChessMove) obj;
+        if (move.getStartPosition() == getStartPosition() && move.getEndPosition() == getEndPosition() && move.getPromotionPiece() == getPromotionPiece()) {
+            return true;
+        }
+        return false;
+    }
     /**
      * @return ChessPosition of starting location
      */
