@@ -172,17 +172,17 @@ public class PieceMoves {
         ChessMove move;
         do {
             move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(mult), myPosition.getColumn()+(x)));
-            if (isMoveValid(board, move) & isMoveCapture(board,move)) {
+            if (isMoveValid(board, move) && isMoveCapture(board,move)) {
                 moves.add(move);
             }
             x = x * -1;
         } while (x != 1);
         move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(mult), myPosition.getColumn()));
-        if (isMoveValid(board, move) & !isMoveCapture(board,move)) {
+        if (isMoveValid(board, move) && !isMoveCapture(board,move)) {
             moves.add(move);
         }
         move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(2*mult), myPosition.getColumn()));
-        if (isMoveValid(board, move) & !isMoveCapture(board,move) & !board.getPiece(move.getEndPosition()).checkMoved()) {
+        if (isMoveValid(board, move) && !isMoveCapture(board,move) && !board.getPiece(move.getEndPosition()).checkMoved()) {
             moves.add(move);
         }
         return moves;
@@ -211,14 +211,14 @@ public class PieceMoves {
         if (end.getColumn() > 8 || end.getColumn() < 1 || end.getRow() > 8 || end.getRow() < 1) {
             return false;
         }
-        if (board.getPiece(end) != null & board.getColor(end) == board.getColor(move.getStartPosition())) {
+        if (board.getPiece(end) != null && board.getColor(end) == board.getColor(move.getStartPosition())) {
             return false;
         }
         return true;
     }
     private boolean isMoveCapture(ChessBoard board, ChessMove move) {
         var end = move.getEndPosition();
-        if (board.getPiece(end) != null & board.getColor(end) != board.getColor(move.getStartPosition())) {
+        if (board.getPiece(end) != null && board.getColor(end) != board.getColor(move.getStartPosition())) {
             return true;
         }
         return false;
