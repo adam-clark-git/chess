@@ -109,16 +109,16 @@ public class ChessPiece {
             return moves.getBishopMoves();
         }
         else if (type == PieceType.QUEEN) {
-            return moves.getBishopMoves();
+            return moves.getQueenMoves();
         }
         else if (type == PieceType.KING) {
-            return moves.getBishopMoves();
+            return moves.getKingMoves();
         }
         else if (type == PieceType.KNIGHT) {
-            return moves.getBishopMoves();
+            return moves.getKnightMoves();
         }
         else if (type == PieceType.PAWN) {
-            return moves.getBishopMoves();
+            return moves.getPawnMoves();
         }
         return null;
     }
