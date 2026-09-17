@@ -116,6 +116,55 @@ public class PieceMoves {
         straightMoves(movement2);
         return moves;
     }
+    public List<ChessMove> getKingMoves() {
+        moves = new ArrayList<ChessMove>();
+        BiFunction<Direction, Integer, ChessPosition> movement1 = (dir, magnitude) -> {
+            ChessPosition end;
+            if (magnitude > 1) {
+                // Just trying to get it to return an error
+                end =  new ChessPosition(20, 20);
+            }
+            else if (dir == Direction.NORTH) {
+                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
+            }
+            else if (dir == Direction.SOUTH) {
+                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
+            }
+            else if (dir == Direction.EAST) {
+                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+1);
+            }
+            else {
+                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-1);
+            }
+            return end;
+        };
+        BiFunction<Direction, Integer, ChessPosition> movement2 = (dir, magnitude) -> {
+            ChessPosition end;
+            if (magnitude > 1) {
+                // Just trying to get it to return an error
+                end =  new ChessPosition(20, 20);
+            }
+            else if (dir == Direction.NORTH) {
+                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+1);
+            }
+            else if (dir == Direction.SOUTH) {
+                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
+            }
+            else if (dir == Direction.EAST) {
+                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+1);
+            }
+            else {
+                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
+            }
+            return end;
+        };
+        straightMoves(movement1);
+        straightMoves(movement2);
+        return moves;
+    }
+
+
+
     private void straightMoves(BiFunction<Direction,Integer,ChessPosition> movement) {
         ChessMove move;
         for (Direction dir : Direction.values()){
