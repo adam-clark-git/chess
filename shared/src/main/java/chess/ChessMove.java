@@ -30,7 +30,7 @@ public class ChessMove {
         }
         if (obj == null || getClass() != obj.getClass()) return false;
         var move = (ChessMove) obj;
-        return move.getStartPosition() == getStartPosition() && move.getEndPosition() == getEndPosition() && move.getPromotionPiece() == getPromotionPiece();
+        return move.getStartPosition().equals(getStartPosition()) && move.getEndPosition().equals(getEndPosition()) && move.getPromotionPiece() == getPromotionPiece();
     }
     @Override
     public int hashCode() {
