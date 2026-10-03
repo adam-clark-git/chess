@@ -56,6 +56,9 @@ public class ChessGame {
         }
         return null;
     }
+    private boolean allMoves(TeamColor color) {
+
+    }
 
     /**
      * Makes a move in the chess game
