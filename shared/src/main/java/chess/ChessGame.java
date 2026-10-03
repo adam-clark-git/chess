@@ -1,8 +1,6 @@
 package chess;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -17,7 +15,20 @@ public class ChessGame {
         board = new ChessBoard();
         teamTurn = TeamColor.WHITE;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
 
+        if (obj == null || getClass() != obj.getClass()) return false;
+        var game = (ChessGame) obj;
+        return (game.getTeamTurn() != teamTurn || board.equals(game.getBoard()));
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(teamTurn, board);
+    }
     /**
      * @return Which team's turn it is
      */
