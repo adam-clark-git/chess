@@ -15,6 +15,10 @@ public class ChessGame {
         board = new ChessBoard();
         teamTurn = TeamColor.WHITE;
     }
+    public ChessGame(ChessGame game) {
+        board = game.getBoard();
+        teamTurn = game.getTeamTurn();
+    }
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

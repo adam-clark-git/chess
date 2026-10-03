@@ -13,6 +13,14 @@ public class ChessBoard {
     public ChessBoard() {
 
     }
+    public ChessBoard(ChessBoard board) {
+        for (int i = 1; i < 8; i++) {
+            for (int j = 1; j < 8; j++) {
+                ChessPosition pos = new ChessPosition(i,j);
+                addPiece(pos, board.getPiece(pos));
+            }
+        }
+    }
     @Override
     public boolean equals(Object obj) {
         if (obj == this){
