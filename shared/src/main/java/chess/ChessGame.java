@@ -129,7 +129,11 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        List<ChessMove> moves = allMoves(teamColor);
+        for (ChessMove move : moves) {
+            if (isInCheck(teamColor)) return true;
+        }
+        return false;
     }
 
     /**
