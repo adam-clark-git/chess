@@ -122,7 +122,7 @@ public class ChessGame {
         TeamColor oppositeTeam = getOppositeColor(teamColor);
         List<ChessMove> moves = allMoves(oppositeTeam);
         for (ChessMove move : moves) {
-            if (move.getEndPosition() == kingPosition) {
+            if (move.getEndPosition().equals(kingPosition)) {
                 return true;
             }
         }
