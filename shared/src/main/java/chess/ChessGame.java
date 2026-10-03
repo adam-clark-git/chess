@@ -14,6 +14,7 @@ public class ChessGame {
     public ChessGame() {
         board = new ChessBoard();
         teamTurn = TeamColor.WHITE;
+        board.resetBoard();
     }
     public ChessGame(ChessGame game) {
         board = new ChessBoard(game.getBoard());
@@ -27,7 +28,9 @@ public class ChessGame {
 
         if (obj == null || getClass() != obj.getClass()) return false;
         var game = (ChessGame) obj;
-        return (game.getTeamTurn() != teamTurn || board.equals(game.getBoard()));
+        //System.out.println("OTHER: " + game.getTeamTurn() + "\n" + game.getBoard().toString());
+        //System.out.println("THIS: " + teamTurn + "\n" + board.toString());
+        return (game.getTeamTurn() == teamTurn && board.equals(game.getBoard()));
     }
     @Override
     public int hashCode() {
@@ -67,12 +70,17 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
         if (piece == null) return null;
+        TeamColor color = piece.getTeamColor();
         Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
         Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
         for (ChessMove move : moves) {
             ChessGame game = new ChessGame(this);
             game.sloppyMove(move);
-            if (!game.isInCheck(teamTurn)) validMoves.add(move);
+            if (!game.isInCheck(color)) {
+                validMoves.add(move);
+                //System.out.println("FakeBoard \n" +game.getBoard().toString());
+                //System.out.println(move);
+            }
         }
         return validMoves;
     }
@@ -134,10 +142,13 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+        //System.out.println(teamColor);
         ChessPosition kingPosition = findKing(teamColor);
+        //System.out.println( "KING HERE" + kingPosition);
         TeamColor oppositeTeam = getOppositeColor(teamColor);
         List<ChessMove> moves = allMoves(oppositeTeam);
         for (ChessMove move : moves) {
+            //System.out.println( "Google en passant" + move.toString());
             if (move.getEndPosition().equals(kingPosition)) {
                 //System.out.println( "Check" + move.toString());
                 return true;
@@ -182,11 +193,8 @@ public class ChessGame {
         return true;
     }
     private TeamColor getOppositeColor(TeamColor teamColor) {
-        TeamColor oppositeColor = switch (teamColor) {
-            case WHITE -> TeamColor.BLACK;
-            case BLACK-> TeamColor.WHITE;
-        };
-        return oppositeColor;
+        if (teamColor == TeamColor.WHITE) return TeamColor.BLACK;
+        return TeamColor.WHITE;
     }
     /**
      * Determines if the given team is in stalemate, which here is defined as having
