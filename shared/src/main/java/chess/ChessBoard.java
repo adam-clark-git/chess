@@ -49,12 +49,14 @@ public class ChessBoard {
     public String toString() {
         String visualization= "";
         for (int i = 1; i <= 8; i++) {
+            visualization += "|";
             for (int j = 1; j <= 8; j++) {
+
                 if (getPiece(new ChessPosition(i, j)) == null) {
-                    visualization += "  ";
+                    visualization += " |";
                 }
                 else {
-                    visualization += getPiece(new ChessPosition(i,j)).toString() + " ";
+                    visualization += getPiece(new ChessPosition(i,j)).toString() + "|";
                 }
             }
             visualization += "\n";
