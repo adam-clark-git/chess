@@ -56,7 +56,7 @@ public class ChessGame {
         }
         return null;
     }
-    private Collection<ChessMove> allMoves(TeamColor color) {
+    private List<ChessMove> allMoves(TeamColor color) {
         List<ChessMove> moves = new ArrayList<ChessMove>();
         for (int i = 1; i < 8; i++) {
             for (int j = 1; j < 8; j++) {
@@ -96,6 +96,16 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = findKing(teamColor);
 
+        TeamColor oppositeTeam = switch (teamColor) {
+            case WHITE -> TeamColor.BLACK;
+            case BLACK-> TeamColor.WHITE;
+        };
+        List<ChessMove> moves = allMoves(oppositeTeam);
+        for (ChessMove move : moves) {
+            if (move.getEndPosition() == kingPosition) {
+                return true;
+            }
+        }
         return false;
     }
     private ChessPosition findKing(TeamColor teamColor) {
