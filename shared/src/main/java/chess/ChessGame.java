@@ -16,7 +16,7 @@ public class ChessGame {
         teamTurn = TeamColor.WHITE;
     }
     public ChessGame(ChessGame game) {
-        board = game.getBoard();
+        board = new ChessBoard(game.getBoard());
         teamTurn = game.getTeamTurn();
     }
     @Override
@@ -66,10 +66,15 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
-        if (piece != null) {
-            return piece.pieceMoves(board, startPosition);
+        if (piece == null) return null;
+        Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
+        Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
+        for (ChessMove move : moves) {
+            ChessGame game = new ChessGame(this);
+            game.sloppyMove(move);
+            if (!game.isInCheck(teamTurn)) validMoves.add(move);
         }
-        return null;
+        return validMoves;
     }
     private List<ChessMove> allMoves(TeamColor color) {
         List<ChessMove> moves = new ArrayList<ChessMove>();
@@ -109,7 +114,19 @@ public class ChessGame {
         board.addPiece(move.getStartPosition(), null);
         setTeamTurn(getOppositeColor(teamTurn));
     }
+    // Move that doesn't check if it results in check
+    private void sloppyMove(ChessMove move) {
+        ChessPiece piece = board.getPiece(move.getStartPosition());
+        if (move.getPromotionPiece() != null) {
+            board.addPiece(move.getEndPosition(), new ChessPiece(piece.getTeamColor(), move.getPromotionPiece()));
+        }
+        else {
+            board.addPiece(move.getEndPosition(), piece);
+        }
+        board.addPiece(move.getStartPosition(), null);
+        setTeamTurn(getOppositeColor(teamTurn));
 
+    }
     /**
      * Determines if the given team is in check
      *
@@ -118,11 +135,11 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = findKing(teamColor);
-        System.out.println("King " + kingPosition);
         TeamColor oppositeTeam = getOppositeColor(teamColor);
         List<ChessMove> moves = allMoves(oppositeTeam);
         for (ChessMove move : moves) {
             if (move.getEndPosition().equals(kingPosition)) {
+                //System.out.println( "Check" + move.toString());
                 return true;
             }
         }
