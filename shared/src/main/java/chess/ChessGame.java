@@ -36,6 +36,10 @@ public class ChessGame {
     public int hashCode() {
         return Objects.hash(teamTurn, board);
     }
+    @Override
+    public String toString() {
+        return teamTurn + "'s turn: \n" + board.toString();
+    }
     /**
      * @return Which team's turn it is
      */
@@ -72,6 +76,9 @@ public class ChessGame {
         if (piece == null) return null;
         TeamColor color = piece.getTeamColor();
         Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
+        return checkMovesValid(moves, color);
+    }
+    private Collection<ChessMove> checkMovesValid(Collection<ChessMove> moves, TeamColor color) {
         Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
         for (ChessMove move : moves) {
             ChessGame game = new ChessGame(this);
@@ -121,6 +128,7 @@ public class ChessGame {
         }
         board.addPiece(move.getStartPosition(), null);
         setTeamTurn(getOppositeColor(teamTurn));
+        //System.out.println(toString());
     }
     // Move that doesn't check if it results in check
     private void sloppyMove(ChessMove move) {
@@ -150,7 +158,7 @@ public class ChessGame {
         for (ChessMove move : moves) {
             //System.out.println( "Google en passant" + move.toString());
             if (move.getEndPosition().equals(kingPosition)) {
-                //System.out.println( "Check" + move.toString());
+                System.out.println( "Check" + move.toString());
                 return true;
             }
         }
@@ -180,17 +188,19 @@ public class ChessGame {
         if (!isInCheck(teamColor)) {
             return false;
         }
-        List<ChessMove> moves = allMoves(teamColor);
-        for (ChessMove move : moves) {
-            ChessGame game = new ChessGame(this);
-            try {
-                game.makeMove(move);
-            } catch (InvalidMoveException e) {
-
+        Collection<ChessMove> moves = allMoves(teamColor);
+        Collection<ChessMove> validMoves = checkMovesValid(moves, teamColor);
+        /*if (moves.size() < 5) {
+            System.out.println("Few possible moves:");
+            for (ChessMove move : moves) {
+                System.out.println(move.toString());
             }
-            if (!game.isInCheck(teamColor)) return false;
+        }*/
+        if (validMoves.isEmpty()) {
+            System.out.println("Checkmate");
+            return true;
         }
-        return true;
+        return false;
     }
     private TeamColor getOppositeColor(TeamColor teamColor) {
         if (teamColor == TeamColor.WHITE) return TeamColor.BLACK;
@@ -207,17 +217,9 @@ public class ChessGame {
         if (isInCheck(teamColor)) {
             return false;
         }
-        List<ChessMove> moves = allMoves(teamColor);
-        for (ChessMove move : moves) {
-            ChessGame game = new ChessGame(this);
-            try {
-                game.makeMove(move);
-            } catch (InvalidMoveException e) {
-
-            }
-            if (!game.isInCheck(teamColor)) return false;
-        }
-        return true;
+        Collection<ChessMove> moves = allMoves(teamColor);
+        Collection<ChessMove> validMoves = checkMovesValid(moves, teamColor);
+        return (validMoves.isEmpty());
     }
 
     /**
