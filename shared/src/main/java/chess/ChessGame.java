@@ -73,12 +73,12 @@ public class ChessGame {
     }
     private List<ChessMove> allMoves(TeamColor color) {
         List<ChessMove> moves = new ArrayList<ChessMove>();
-        for (int i = 1; i < 8; i++) {
-            for (int j = 1; j < 8; j++) {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
                 ChessPosition position = new ChessPosition(i, j);
                 ChessPiece piece = board.getPiece(position);
                 if (piece != null) {
-                    if (piece.getTeamColor() == teamTurn) {
+                    if (piece.getTeamColor() == color) {
                         moves.addAll(piece.pieceMoves(board, position));
                     }
                 }
@@ -129,8 +129,8 @@ public class ChessGame {
         return false;
     }
     private ChessPosition findKing(TeamColor teamColor) {
-        for (int i = 1; i < 8; i++) {
-            for (int j = 1; j < 8; j++) {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
                 ChessPosition position = new ChessPosition(i,j);
                 ChessPiece piece = board.getPiece(position);
                 if (piece != null) {
