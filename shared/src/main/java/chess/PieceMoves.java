@@ -220,9 +220,9 @@ public class PieceMoves {
                 }
             }
         }
-        for (ChessMove movin : moves) {
+        /*for (ChessMove movin : moves) {
             System.out.println(movin.getEndPosition().toString());
-        }
+        }*/
         return moves;
         // Implement En Passant Later
         // Implement Promotion Later
