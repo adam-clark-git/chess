@@ -100,6 +100,7 @@ public class ChessGame {
         ChessPiece piece = board.getPiece(move.getStartPosition());
         board.addPiece(move.getEndPosition(), piece);
         board.addPiece(move.getStartPosition(), null);
+        setTeamTurn(getOppositeColor(teamTurn));
     }
 
     /**
@@ -110,11 +111,7 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = findKing(teamColor);
-
-        TeamColor oppositeTeam = switch (teamColor) {
-            case WHITE -> TeamColor.BLACK;
-            case BLACK-> TeamColor.WHITE;
-        };
+        TeamColor oppositeTeam = getOppositeColor(teamColor);
         List<ChessMove> moves = allMoves(oppositeTeam);
         for (ChessMove move : moves) {
             if (move.getEndPosition() == kingPosition) {
@@ -144,13 +141,28 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+        if (!isInCheck(teamColor)) {
+            return false;
+        }
         List<ChessMove> moves = allMoves(teamColor);
         for (ChessMove move : moves) {
-            if (isInCheck(teamColor)) return true;
-        }
-        return false;
-    }
+            ChessGame game = new ChessGame(this);
+            try {
+                game.makeMove(move);
+            } catch (InvalidMoveException e) {
 
+            }
+            if (!game.isInCheck(teamColor)) return false;
+        }
+        return true;
+    }
+    private TeamColor getOppositeColor(TeamColor teamColor) {
+        TeamColor oppositeColor = switch (teamColor) {
+            case WHITE -> TeamColor.BLACK;
+            case BLACK-> TeamColor.WHITE;
+        };
+        return oppositeColor;
+    }
     /**
      * Determines if the given team is in stalemate, which here is defined as having
      * no valid moves while not in check.
