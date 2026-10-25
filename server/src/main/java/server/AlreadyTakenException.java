@@ -3,7 +3,7 @@ package server;
 /**
  * Indicates that the username is already used.
  */
-public class AlreadyTakenException extends Exception{
+public class AlreadyTakenException extends DataAccessException{
     public AlreadyTakenException(String message) {
         super(message);
     }

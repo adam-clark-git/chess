@@ -1,9 +1,9 @@
 package server;
 
 /**
- * Indicates there was an error connecting to the database
+ * Indicates there was no authToken found in the database
  */
-public class AuthException extends Exception{
+public class AuthException extends DataAccessException{
     public AuthException(String message) {
         super(message);
     }
