@@ -53,4 +53,17 @@ public class UserServiceTest {
         assertThrows(PasswordIncorrectException.class,
                 () -> service.loginUser(new LoginRequest("user", "pw2")));
     }
+    @Test
+    void logoutSuccess() throws DataAccessException {
+        RegisterResult result = service.registerUser(new RegisterRequest("cal", "pw", "speed.com"));
+        String token = result.authToken();
+        service.logoutUser(new AuthToken(token));
+    }
+    @Test
+    void logoutWithNoAuth() throws DataAccessException {
+        assertThrows(AuthException.class,
+                () -> service.logoutUser(new AuthToken(null)));
+    }
+
+
 }
