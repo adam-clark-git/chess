@@ -29,8 +29,8 @@ public class GameService {
 
         return new ListGamesResult(gameDAO.listGames());
     }
-    public int createGame(AuthToken authToken) throws DataAccessException {
-        String token = authToken.token();
+    public int createGame(GameRequest request) throws DataAccessException {
+        String token = request.authToken().token();
         AuthData auth = authDAO.checkAuth(token);
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");
@@ -38,14 +38,16 @@ public class GameService {
         ChessGame game = new ChessGame();
         String username = auth.username();
         int gameID = UUID.randomUUID().hashCode() & Integer.MAX_VALUE;
+        String black = "";
+        String white = "";
         if (gameID % 2 == 1) {
-            String black = username;
-            String white = "";
+            black = username;
         }
         else {
-            String black = "";
-            String white = username;
+            white = username;
         }
+        String name = request.gameName();
+        gameDAO.createGame(new GameData(gameID,white, black, name, game));
         return gameID;
     }
 
