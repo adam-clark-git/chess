@@ -1,0 +1,23 @@
+package dataAccess;
+
+import model.UserData;
+import server.DataAccessException;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MemoryUserDAO implements UserDAO {
+    private final Map<String, UserData> users = new HashMap<>();
+    @Override
+    public void clear() throws DataAccessException {
+        users.clear();
+    }
+    @Override
+    public void createUser(UserData user) throws DataAccessException {
+        users.put(user.username(), user);
+    }
+    @Override
+    public UserData getUserData(String username) throws DataAccessException {
+        return users.get(username);
+    }
+}
