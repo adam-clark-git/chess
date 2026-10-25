@@ -44,6 +44,30 @@ public class GameService {
         gameDAO.createGame(new GameData(gameID,white, black, name, game));
         return gameID;
     }
+    public void joinGame(JoinGameRequest request) throws DataAccessException {
+        String token = request.authToken().token();
+        AuthData auth = authDAO.checkAuth(token);
+        if (auth == null) {
+            throw new AuthException("Error: Unauthorized");
+        }
+        String username = auth.username();
+        GameData gameData =  gameDAO.getGame(request.gameID());
+        GameData newGameData;
+        if (request.gameColor() == ChessGame.TeamColor.BLACK) {
+            if (gameData.blackUsername() != "") {
+                throw new ColorTakenException("Error: Color is taken");
+            }
+            newGameData = new GameData(gameData.gameID(), gameData.blackUsername(), username, gameData.gameName(), gameData.game());
+        }
+        else {
+            if (gameData.whiteUsername() != "") {
+                throw new ColorTakenException("Error: Color is taken");
+            }
+            newGameData = new GameData(gameData.gameID(), username, gameData.whiteUsername(), gameData.gameName(), gameData.game());
+        }
+        gameDAO.updateGame(newGameData);
+
+    }
 
 
 }
