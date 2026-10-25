@@ -34,4 +34,23 @@ public class UserServiceTest {
         assertThrows(BadRequestException.class,
                 () -> service.registerUser(new RegisterRequest("bobby", null, "a@b.com")));
     }
+    @Test
+    void loginSuccess() throws DataAccessException{
+        service.registerUser(new RegisterRequest("cal", "pw", "speed.com"));
+        var result = service.loginUser(new LoginRequest("cal", "pw"));
+        assertEquals("cal", result.username());
+        assertNotNull(result.authToken());
+
+    }
+    @Test
+    void loginNoAccount() throws DataAccessException {
+        assertThrows(AuthException.class,
+                () -> service.loginUser(new LoginRequest("bobby", "pw")));
+    }
+    @Test
+    void loginPasswordWrong() throws DataAccessException {
+        service.registerUser(new RegisterRequest("user", "pw1", "email"));
+        assertThrows(AuthException.class,
+                () -> service.loginUser(new LoginRequest("user", "pw2")));
+    }
 }
