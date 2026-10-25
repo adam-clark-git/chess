@@ -44,13 +44,13 @@ public class UserServiceTest {
     }
     @Test
     void loginNoAccount() throws DataAccessException {
-        assertThrows(AuthException.class,
+        assertThrows(AlreadyTakenException.class,
                 () -> service.loginUser(new LoginRequest("bobby", "pw")));
     }
     @Test
     void loginPasswordWrong() throws DataAccessException {
         service.registerUser(new RegisterRequest("user", "pw1", "email"));
-        assertThrows(AuthException.class,
+        assertThrows(PasswordIncorrectException.class,
                 () -> service.loginUser(new LoginRequest("user", "pw2")));
     }
 }
