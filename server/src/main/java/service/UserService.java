@@ -3,10 +3,7 @@ package service;
 import dataAccess.AuthDAO;
 import dataAccess.UserDAO;
 import model.UserData;
-import server.AlreadyTakenException;
-import server.AuthException;
-import server.BadRequestException;
-import server.DataAccessException;
+import server.*;
 import model.UserData;
 import model.AuthData;
 import java.util.UUID;
@@ -32,6 +29,7 @@ public class UserService {
         userDAO.createUser(user);
         String authToken = UUID.randomUUID().toString();
         AuthData auth = new AuthData(authToken, username);
+        authDAO.createAuth(auth);
         return new RegisterResult(username, authToken);
     }
     public RegisterResult loginUser(LoginRequest request) throws DataAccessException {
@@ -42,14 +40,14 @@ public class UserService {
         }
         UserData user = userDAO.getUserData(username);
         if (user == null) {
-            throw new AuthException("Error: No user found");
+            throw new AlreadyTakenException("Error: No user found");
         }
         if (password != user.password()) {
-            throw new AuthException("Error: Password invalid");
+            throw new PasswordIncorrectException("Error: Password invalid");
         }
         String authToken = UUID.randomUUID().toString();
         AuthData auth = new AuthData(authToken, username);
-
+        authDAO.createAuth(auth);
         return new RegisterResult(username, authToken);
     }
 }
