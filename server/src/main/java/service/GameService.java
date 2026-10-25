@@ -40,12 +40,6 @@ public class GameService {
         int gameID = UUID.randomUUID().hashCode() & Integer.MAX_VALUE;
         String black = "";
         String white = "";
-        if (gameID % 2 == 1) {
-            black = username;
-        }
-        else {
-            white = username;
-        }
         String name = request.gameName();
         gameDAO.createGame(new GameData(gameID,white, black, name, game));
         return gameID;
