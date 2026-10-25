@@ -50,4 +50,12 @@ public class UserService {
         authDAO.createAuth(auth);
         return new RegisterResult(username, authToken);
     }
+    public void logoutUser(AuthToken authToken) throws DataAccessException {
+        String token = authToken.token();
+        AuthData auth = authDAO.checkAuth(token);
+        if (auth == null) {
+            throw new AuthException("Error: Unauthorized");
+        }
+        authDAO.deleteAuth(token);
+    }
 }
