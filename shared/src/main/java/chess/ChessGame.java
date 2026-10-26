@@ -71,7 +71,9 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
-        if (piece == null) return null;
+        if (piece == null) {
+            return null;
+        }
         TeamColor color = piece.getTeamColor();
         Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
         return checkMovesValid(moves, color);
@@ -198,7 +200,9 @@ public class ChessGame {
         return false;
     }
     private TeamColor getOppositeColor(TeamColor teamColor) {
-        if (teamColor == TeamColor.WHITE) return TeamColor.BLACK;
+        if (teamColor == TeamColor.WHITE) {
+            return TeamColor.BLACK;
+        }
         return TeamColor.WHITE;
     }
     /**
