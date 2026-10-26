@@ -1,4 +1,4 @@
-package server;
+package server.exceptions;
 
 /**
  * Indicates there was no authToken found in the database

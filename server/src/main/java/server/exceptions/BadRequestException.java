@@ -1,4 +1,4 @@
-package server;
+package server.exceptions;
 
 /**
  * Indicates that the request is missing values
