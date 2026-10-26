@@ -24,6 +24,10 @@ public class GameHandler {
         var result = gameService.createGame(request);
         ctx.status(200).result(gson.toJson(result));
     }
-
+    public void joinGame(Context ctx) throws DataAccessException {
+        var request = ctx.bodyAsClass(JoinGameRequest.class);
+        gameService.joinGame(request);
+        ctx.status(200).result("{}");
+    }
 
 }
