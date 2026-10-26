@@ -15,17 +15,17 @@ public class GameHandler {
     }
 
     public void listGames(Context ctx) throws DataAccessException {
-        var request = ctx.bodyAsClass(AuthToken.class);
+        var request = gson.fromJson(ctx.body(), AuthToken.class);
         var result = gameService.listGames(request);
-        ctx.status(200).json(gson.toJson(result));
+        ctx.status(200).result(gson.toJson(result));
     }
     public void createGame(Context ctx) throws DataAccessException {
-        var request = ctx.bodyAsClass(GameRequest.class);
+        var request = gson.fromJson(ctx.body(), GameRequest.class);
         var result = gameService.createGame(request);
-        ctx.status(200).json(gson.toJson(result));
+        ctx.status(200).result(gson.toJson(result));
     }
     public void joinGame(Context ctx) throws DataAccessException {
-        var request = ctx.bodyAsClass(JoinGameRequest.class);
+        var request = gson.fromJson(ctx.body(), JoinGameRequest.class);
         gameService.joinGame(request);
         ctx.status(200).result("{}");
     }

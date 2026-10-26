@@ -14,17 +14,17 @@ public class UserHandler {
     }
 
     public void registerUser(Context ctx) throws DataAccessException {
-        RegisterRequest request = ctx.bodyAsClass(RegisterRequest.class);
+        RegisterRequest request = gson.fromJson(ctx.body(), RegisterRequest.class);
         RegisterResult result = userService.registerUser(request);
-        ctx.status(200).json(gson.toJson(result));
+        ctx.status(200).result(gson.toJson(result));
     }
     public void loginUser(Context ctx) throws DataAccessException {
-        var request = ctx.bodyAsClass(LoginRequest.class);
+        var request = gson.fromJson(ctx.body(), LoginRequest.class);
         var result = userService.loginUser(request);
-        ctx.status(200).json(gson.toJson(result));
+        ctx.status(200).result(gson.toJson(result));
     }
     public void logoutUser(Context ctx) throws DataAccessException {
-        var request = ctx.bodyAsClass(AuthToken.class);
+        var request = gson.fromJson(ctx.body(), AuthToken.class);
         userService.logoutUser(request);
         ctx.status(200).result("{}");
     }
