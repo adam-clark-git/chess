@@ -20,12 +20,16 @@ public class GameHandler {
         ctx.status(200).result(gson.toJson(result));
     }
     public void createGame(Context ctx) throws DataAccessException {
-        var request = gson.fromJson(ctx.body(), GameRequest.class);
+        String token = ctx.header("authorization");
+        var body = gson.fromJson(ctx.body(), GameRequest.class);
+        GameRequest request = new GameRequest(token, body.gameName());
         var result = gameService.createGame(request);
         ctx.status(200).result(gson.toJson(result));
     }
     public void joinGame(Context ctx) throws DataAccessException {
-        var request = gson.fromJson(ctx.body(), JoinGameRequest.class);
+        String token = ctx.header("authorization");
+        var body = gson.fromJson(ctx.body(), JoinGameRequest.class);
+        JoinGameRequest request = new JoinGameRequest(token, body.gameColor(), body.gameID());
         gameService.joinGame(request);
         ctx.status(200).result("{}");
     }
