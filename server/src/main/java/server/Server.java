@@ -64,4 +64,3 @@ public class Server {
         javalin.stop();
     }
 }
--
