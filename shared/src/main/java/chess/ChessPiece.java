@@ -23,7 +23,9 @@ public class ChessPiece {
         if (obj == this){
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         var piece = (ChessPiece) obj;
         if (piece.getTeamColor() == getTeamColor() && piece.getPieceType() == getPieceType()) {
             return true;

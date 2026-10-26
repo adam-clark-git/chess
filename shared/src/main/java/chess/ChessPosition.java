@@ -20,7 +20,9 @@ public class ChessPosition {
         if (obj == this){
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         var pos = (ChessPosition) obj;
         return pos.getRow() == getRow() && pos.getColumn() == getColumn();
     }

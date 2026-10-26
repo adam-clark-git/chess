@@ -27,7 +27,9 @@ public class ChessBoard {
             return true;
         }
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         var board = (ChessBoard) obj;
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {

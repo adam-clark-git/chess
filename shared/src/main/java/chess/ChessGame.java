@@ -114,10 +114,18 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if (board.getPiece(move.startPosition) == null) throw new InvalidMoveException("Starting Position is empty");
-        if (board.getPiece(move.startPosition).getTeamColor() != teamTurn) throw new InvalidMoveException("Not color's turn");
-        if (!validMoves(move.startPosition).contains(move)) throw new InvalidMoveException("Not in List");
-        if (isInCheck(teamTurn)) throw new InvalidMoveException("King is in check");
+        if (board.getPiece(move.startPosition) == null) {
+            throw new InvalidMoveException("Starting Position is empty");
+        }
+        if (board.getPiece(move.startPosition).getTeamColor() != teamTurn) {
+            throw new InvalidMoveException("Not color's turn");
+        }
+        if (!validMoves(move.startPosition).contains(move)) {
+            throw new InvalidMoveException("Not in List");
+        }
+        if (isInCheck(teamTurn)) {
+            throw new InvalidMoveException("King is in check");
+        }
 
         ChessPiece piece = board.getPiece(move.getStartPosition());
         if (move.getPromotionPiece() != null) {
