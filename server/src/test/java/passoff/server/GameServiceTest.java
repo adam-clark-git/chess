@@ -10,7 +10,6 @@ import server.exceptions.GameNotFoundException;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import service.endpoints.AuthToken;
 import service.endpoints.GameRequest;
 import service.endpoints.JoinGameRequest;
 import service.endpoints.RegisterRequest;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameServiceTest {
     private GameService service;
     private UserService userService;
-    private AuthToken authToken;
+    private String authToken;
     @BeforeEach
     void setUp() {
         MemoryUserDAO userDAO = new MemoryUserDAO();
@@ -33,7 +32,7 @@ public class GameServiceTest {
         service = new GameService(userDAO, authDAO, gameDAO);
         try{
             var registerResult = userService.registerUser(new RegisterRequest("ethan", "pw", "a@b.com"));
-            authToken = new AuthToken(registerResult.authToken());
+            authToken = registerResult.authToken();
         } catch (DataAccessException e) {
             // This shouldn't happen
             System.out.println("ERROR ERROR SOMETHING HAS GONE TERRIBLY WRONG");
@@ -47,7 +46,7 @@ public class GameServiceTest {
     @Test
     void noAuthCreateGame() throws DataAccessException {
         assertThrows(AuthException.class,
-                () -> service.createGame((new GameRequest(new AuthToken("5"), "Game"))));
+                () -> service.createGame((new GameRequest("5", "Game"))));
     }
     @Test
     void listGamesSuccess() throws DataAccessException {

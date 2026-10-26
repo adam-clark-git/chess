@@ -5,7 +5,6 @@ import server.exceptions.DataAccessException;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import service.endpoints.AuthToken;
 import service.endpoints.GameRequest;
 import service.endpoints.RegisterRequest;
 
@@ -13,7 +12,7 @@ public class ClearServiceTest {
     private GameService gameService;
     private UserService userService;
     private ClearService clearService;
-    private AuthToken authToken;
+    private String authToken;
     @BeforeEach
     void setUp() {
         MemoryUserDAO userDAO = new MemoryUserDAO();
@@ -24,7 +23,7 @@ public class ClearServiceTest {
         clearService = new ClearService(userDAO, authDAO, gameDAO);
         try{
             var registerResult = userService.registerUser(new RegisterRequest("ethan", "pw", "a@b.com"));
-            authToken = new AuthToken(registerResult.authToken());
+            authToken = registerResult.authToken();
             gameService.createGame(new GameRequest(authToken, "Game"));
         } catch (DataAccessException e) {
             // This shouldn't happen

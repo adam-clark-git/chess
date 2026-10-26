@@ -2,4 +2,4 @@ package service.endpoints;
 
 import chess.ChessGame;
 
-public record JoinGameRequest(AuthToken authToken, ChessGame.TeamColor gameColor, int gameID){}
+public record JoinGameRequest(String authToken, ChessGame.TeamColor gameColor, int gameID){}

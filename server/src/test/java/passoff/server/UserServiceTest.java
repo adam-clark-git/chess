@@ -5,7 +5,6 @@ import server.exceptions.*;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import service.endpoints.AuthToken;
 import service.endpoints.LoginRequest;
 import service.endpoints.RegisterRequest;
 import service.endpoints.RegisterResult;
@@ -59,12 +58,12 @@ public class UserServiceTest {
     void logoutSuccess() throws DataAccessException {
         RegisterResult result = service.registerUser(new RegisterRequest("cal", "pw", "speed.com"));
         String token = result.authToken();
-        service.logoutUser(new AuthToken(token));
+        service.logoutUser(token);
     }
     @Test
     void logoutWithNoAuth() throws DataAccessException {
         assertThrows(AuthException.class,
-                () -> service.logoutUser(new AuthToken(null)));
+                () -> service.logoutUser(null));
     }
 
 

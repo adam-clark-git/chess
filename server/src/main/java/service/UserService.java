@@ -5,7 +5,6 @@ import dataAccess.UserDAO;
 import model.UserData;
 import model.AuthData;
 import server.exceptions.*;
-import service.endpoints.AuthToken;
 import service.endpoints.LoginRequest;
 import service.endpoints.RegisterRequest;
 import service.endpoints.RegisterResult;
@@ -54,12 +53,11 @@ public class UserService {
         authDAO.createAuth(auth);
         return new RegisterResult(username, authToken);
     }
-    public void logoutUser(AuthToken authToken) throws DataAccessException {
-        String token = authToken.token();
-        AuthData auth = authDAO.checkAuth(token);
+    public void logoutUser(String authToken) throws DataAccessException {
+        AuthData auth = authDAO.checkAuth(authToken);
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");
         }
-        authDAO.deleteAuth(token);
+        authDAO.deleteAuth(authToken);
     }
 }

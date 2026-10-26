@@ -7,7 +7,6 @@ import server.exceptions.AuthException;
 import server.exceptions.ColorTakenException;
 import server.exceptions.DataAccessException;
 import server.exceptions.GameNotFoundException;
-import service.endpoints.AuthToken;
 import service.endpoints.GameRequest;
 import service.endpoints.JoinGameRequest;
 import service.endpoints.ListGamesResult;
@@ -25,9 +24,8 @@ public class GameService {
         this.gameDAO = gameDAO;
     }
 
-    public ListGamesResult listGames(AuthToken authToken) throws DataAccessException {
-        String token = authToken.token();
-        AuthData auth = authDAO.checkAuth(token);
+    public ListGamesResult listGames(String authToken) throws DataAccessException {
+        AuthData auth = authDAO.checkAuth(authToken);
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");
         }
@@ -35,7 +33,7 @@ public class GameService {
         return new ListGamesResult(gameDAO.listGames());
     }
     public int createGame(GameRequest request) throws DataAccessException {
-        String token = request.authToken().token();
+        String token = request.authToken();
         AuthData auth = authDAO.checkAuth(token);
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");
@@ -50,7 +48,7 @@ public class GameService {
         return gameID;
     }
     public void joinGame(JoinGameRequest request) throws DataAccessException {
-        String token = request.authToken().token();
+        String token = request.authToken();
         AuthData auth = authDAO.checkAuth(token);
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");
