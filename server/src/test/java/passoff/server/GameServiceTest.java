@@ -1,7 +1,7 @@
 package passoff.server;
 
 import chess.ChessGame;
-import dataAccess.*;
+import dataaccess.*;
 import model.GameData;
 import server.exceptions.AuthException;
 import server.exceptions.ColorTakenException;

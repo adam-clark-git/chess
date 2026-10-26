@@ -1,7 +1,7 @@
 package service;
 
 import chess.ChessGame;
-import dataAccess.*;
+import dataaccess.*;
 import model.*;
 import server.exceptions.*;
 import service.endpoints.CreateGameResult;
