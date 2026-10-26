@@ -4,9 +4,11 @@ import chess.ChessGame;
 import dataAccess.*;
 import server.*;
 import model.*;
-import service.AuthToken;
+import service.endpoints.AuthToken;
+import service.endpoints.GameRequest;
+import service.endpoints.JoinGameRequest;
+import service.endpoints.ListGamesResult;
 
-import java.util.List;
 import java.util.UUID;
 
 public class GameService {

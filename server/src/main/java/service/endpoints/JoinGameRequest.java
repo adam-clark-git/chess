@@ -1,4 +1,4 @@
-package service;
+package service.endpoints;
 
 import chess.ChessGame;
 

@@ -4,8 +4,12 @@ import dataAccess.AuthDAO;
 import dataAccess.UserDAO;
 import model.UserData;
 import server.*;
-import model.UserData;
 import model.AuthData;
+import service.endpoints.AuthToken;
+import service.endpoints.LoginRequest;
+import service.endpoints.RegisterRequest;
+import service.endpoints.RegisterResult;
+
 import java.util.UUID;
 
 public class UserService {
