@@ -26,7 +26,9 @@ public class ChessGame {
             return true;
         }
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         var game = (ChessGame) obj;
         return (game.getTeamTurn() == teamTurn && board.equals(game.getBoard()));
     }
@@ -134,7 +136,6 @@ public class ChessGame {
         }
         board.addPiece(move.getStartPosition(), null);
         setTeamTurn(getOppositeColor(teamTurn));
-        //System.out.println(toString());
     }
     // Move that doesn't check if it results in check
     private void sloppyMove(ChessMove move) {
