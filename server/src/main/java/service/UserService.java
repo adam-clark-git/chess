@@ -46,7 +46,7 @@ public class UserService {
         if (user == null) {
             throw new AlreadyTakenException("Error: No user found");
         }
-        if (password != user.password()) {
+        if (!password.equals(user.password())) {
             throw new PasswordIncorrectException("Error: Password invalid");
         }
         String authToken = UUID.randomUUID().toString();
