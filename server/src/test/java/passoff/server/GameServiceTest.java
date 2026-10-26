@@ -1,5 +1,6 @@
 package passoff.server;
 
+import chess.ChessGame;
 import dataAccess.*;
 import model.GameData;
 import server.*;
@@ -65,7 +66,23 @@ public class GameServiceTest {
                 () -> result.games().get(0));
         assertNotNull(result);
     }
-
+    @Test
+    void joinGameSuccess() throws DataAccessException {
+        int gameID = service.createGame(new GameRequest(authToken, "Game"));
+        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID));
+    }
+    @Test
+    void joinNoExistingGame() throws DataAccessException {
+        assertThrows(GameNotFoundException.class,
+                () -> service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, 5)));
+    }
+    @Test
+    void joinGameWithColorTaken() throws DataAccessException {
+        int gameID = service.createGame(new GameRequest(authToken, "Game"));
+        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID));
+        assertThrows(ColorTakenException.class,
+                () -> service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID)));
+    }
 
 
 }
