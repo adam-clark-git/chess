@@ -52,6 +52,9 @@ public class GameService {
         }
         String username = auth.username();
         GameData gameData =  gameDAO.getGame(request.gameID());
+        if (gameData == null) {
+            throw new GameNotFoundException("Game Not Found");
+        }
         GameData newGameData;
         if (request.gameColor() == ChessGame.TeamColor.BLACK) {
             if (gameData.blackUsername() != "") {
