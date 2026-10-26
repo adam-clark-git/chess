@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" name="google.code.gson" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
