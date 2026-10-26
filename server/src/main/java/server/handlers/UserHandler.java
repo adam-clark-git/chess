@@ -16,12 +16,12 @@ public class UserHandler {
     public void registerUser(Context ctx) throws DataAccessException {
         RegisterRequest request = ctx.bodyAsClass(RegisterRequest.class);
         RegisterResult result = userService.registerUser(request);
-        ctx.status(200).result(gson.toJson(result));
+        ctx.status(200).json(gson.toJson(result));
     }
     public void loginUser(Context ctx) throws DataAccessException {
         var request = ctx.bodyAsClass(LoginRequest.class);
         var result = userService.loginUser(request);
-        ctx.status(200).result(gson.toJson(result));
+        ctx.status(200).json(gson.toJson(result));
     }
     public void logoutUser(Context ctx) throws DataAccessException {
         var request = ctx.bodyAsClass(AuthToken.class);
