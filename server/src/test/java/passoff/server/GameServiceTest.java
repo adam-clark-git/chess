@@ -7,8 +7,10 @@ import server.*;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-
-import javax.xml.crypto.Data;
+import service.endpoints.AuthToken;
+import service.endpoints.GameRequest;
+import service.endpoints.JoinGameRequest;
+import service.endpoints.RegisterRequest;
 
 import java.util.Comparator;
 import java.util.List;

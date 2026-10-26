@@ -1,19 +1,13 @@
 package passoff.server;
 
-import chess.ChessGame;
 import dataAccess.*;
-import model.GameData;
 import server.*;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-
-import javax.xml.crypto.Data;
-
-import java.util.Comparator;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import service.endpoints.AuthToken;
+import service.endpoints.GameRequest;
+import service.endpoints.RegisterRequest;
 
 public class ClearServiceTest {
     private GameService gameService;

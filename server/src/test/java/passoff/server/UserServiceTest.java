@@ -5,8 +5,10 @@ import server.*;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-
-import javax.xml.crypto.Data;
+import service.endpoints.AuthToken;
+import service.endpoints.LoginRequest;
+import service.endpoints.RegisterRequest;
+import service.endpoints.RegisterResult;
 
 import static org.junit.jupiter.api.Assertions.*;
 
