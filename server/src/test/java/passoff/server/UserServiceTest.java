@@ -1,7 +1,7 @@
 package passoff.server;
 
 import dataAccess.*;
-import server.*;
+import server.exceptions.*;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

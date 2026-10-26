@@ -1,8 +1,7 @@
 package dataAccess;
 
 import model.UserData;
-import server.AlreadyTakenException;
-import server.DataAccessException;
+import server.exceptions.DataAccessException;
 
 public interface UserDAO {
     void clear() throws DataAccessException;

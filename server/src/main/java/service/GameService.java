@@ -2,8 +2,11 @@ package service;
 
 import chess.ChessGame;
 import dataAccess.*;
-import server.*;
 import model.*;
+import server.exceptions.AuthException;
+import server.exceptions.ColorTakenException;
+import server.exceptions.DataAccessException;
+import server.exceptions.GameNotFoundException;
 import service.endpoints.AuthToken;
 import service.endpoints.GameRequest;
 import service.endpoints.JoinGameRequest;
