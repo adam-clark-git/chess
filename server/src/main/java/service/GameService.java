@@ -3,10 +3,7 @@ package service;
 import chess.ChessGame;
 import dataAccess.*;
 import model.*;
-import server.exceptions.AuthException;
-import server.exceptions.ColorTakenException;
-import server.exceptions.DataAccessException;
-import server.exceptions.GameNotFoundException;
+import server.exceptions.*;
 import service.endpoints.CreateGameResult;
 import service.endpoints.GameRequest;
 import service.endpoints.JoinGameRequest;
@@ -39,11 +36,14 @@ public class GameService {
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");
         }
+        if (request.gameName() == null) {
+            throw new BadRequestException("Error: Missing Game name");
+        }
         ChessGame game = new ChessGame();
         String username = auth.username();
         int gameID = UUID.randomUUID().hashCode() & Integer.MAX_VALUE;
-        String black = "";
-        String white = "";
+        String black = null;
+        String white = null;
         String name = request.gameName();
         gameDAO.createGame(new GameData(gameID,white, black, name, game));
         return new CreateGameResult(gameID);
@@ -61,16 +61,18 @@ public class GameService {
         }
         GameData newGameData;
         if (request.gameColor() == ChessGame.TeamColor.BLACK) {
-            if (gameData.blackUsername() != "") {
+            if (gameData.blackUsername() != null) {
                 throw new ColorTakenException("Error: Color is taken");
             }
-            newGameData = new GameData(gameData.gameID(), gameData.blackUsername(), username, gameData.gameName(), gameData.game());
+            newGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), username, gameData.gameName(), gameData.game());
+
         }
         else {
-            if (gameData.whiteUsername() != "") {
+            if (gameData.whiteUsername() != null) {
                 throw new ColorTakenException("Error: Color is taken");
             }
-            newGameData = new GameData(gameData.gameID(), username, gameData.whiteUsername(), gameData.gameName(), gameData.game());
+            newGameData = new GameData(gameData.gameID(), username, gameData.blackUsername(), gameData.gameName(), gameData.game());
+
         }
         gameDAO.updateGame(newGameData);
 
