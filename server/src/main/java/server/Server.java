@@ -3,7 +3,7 @@ package server;
 import com.google.gson.Gson;
 import dataAccess.*;
 import io.javalin.*;
-import server.exceptions.BadRequestException;
+import server.exceptions.*;
 import server.handlers.ClearHandler;
 import server.handlers.GameHandler;
 import server.handlers.UserHandler;
@@ -40,7 +40,19 @@ public class Server {
         javalin.delete("/db", clearHandler::clear);
 
         // Register your endpoints and exception handlers here.
-        // Need to still do exception handlers
+        javalin.exception(BadRequestException.class, (e, ctx) -> sendError(ctx, 400, e));
+        javalin.exception(DataAccessException.class ,(e, ctx) -> sendError(ctx, 500, e)); // Should be changed, I'm unsure of the proper error code
+        javalin.exception(AuthException.class ,(e, ctx) -> sendError(ctx, 401, e));
+        javalin.exception(ColorTakenException.class ,(e, ctx) -> sendError(ctx, 403, e));
+        javalin.exception(AlreadyTakenException.class ,(e, ctx) -> sendError(ctx, 403, e));
+        javalin.exception(GameNotFoundException.class ,(e, ctx) -> sendError(ctx, 400, e));
+        javalin.exception(PasswordIncorrectException.class ,(e, ctx) -> sendError(ctx, 401, e));
+
+
+    }
+
+    private void sendError(Context ctx, int status, Exception e) {
+        ctx.status(status).result(gson.toJson(Map.of("message", e.getMessage())));
     }
 
     public int run(int desiredPort) {
@@ -52,3 +64,4 @@ public class Server {
         javalin.stop();
     }
 }
+-
