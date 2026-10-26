@@ -96,9 +96,6 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public void updateMove() {
-        hasMoved = true;
-    }
     public boolean checkMoved() {
         return hasMoved;
     }

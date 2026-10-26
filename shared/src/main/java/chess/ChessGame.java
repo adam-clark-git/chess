@@ -28,8 +28,6 @@ public class ChessGame {
 
         if (obj == null || getClass() != obj.getClass()) return false;
         var game = (ChessGame) obj;
-        //System.out.println("OTHER: " + game.getTeamTurn() + "\n" + game.getBoard().toString());
-        //System.out.println("THIS: " + teamTurn + "\n" + board.toString());
         return (game.getTeamTurn() == teamTurn && board.equals(game.getBoard()));
     }
     @Override
@@ -85,8 +83,6 @@ public class ChessGame {
             game.sloppyMove(move);
             if (!game.isInCheck(color)) {
                 validMoves.add(move);
-                //System.out.println("FakeBoard \n" +game.getBoard().toString());
-                //System.out.println(move);
             }
         }
         return validMoves;
@@ -158,13 +154,10 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        //System.out.println(teamColor);
         ChessPosition kingPosition = findKing(teamColor);
-        //System.out.println( "KING HERE" + kingPosition);
         TeamColor oppositeTeam = getOppositeColor(teamColor);
         List<ChessMove> moves = allMoves(oppositeTeam);
         for (ChessMove move : moves) {
-            //System.out.println( "Google en passant" + move.toString());
             if (move.getEndPosition().equals(kingPosition)) {
                 System.out.println( "Check" + move.toString());
                 return true;
@@ -198,12 +191,6 @@ public class ChessGame {
         }
         Collection<ChessMove> moves = allMoves(teamColor);
         Collection<ChessMove> validMoves = checkMovesValid(moves, teamColor);
-        /*if (moves.size() < 5) {
-            System.out.println("Few possible moves:");
-            for (ChessMove move : moves) {
-                System.out.println(move.toString());
-            }
-        }*/
         if (validMoves.isEmpty()) {
             System.out.println("Checkmate");
             return true;
