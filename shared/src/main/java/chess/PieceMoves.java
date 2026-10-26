@@ -72,7 +72,9 @@ public class PieceMoves {
     public List<ChessMove> getKnightMoves() {
         moves = new ArrayList<ChessMove>();
         BiFunction<Direction, Integer, ChessMove> movement = (dir, num) -> {
-            if (num > 1) return null;
+            if (num > 1) {
+                return null;
+            }
             switch (dir) {
                 case NORTH -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()+1), null);}
                 case SOUTH -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()+1), null);}
@@ -92,7 +94,9 @@ public class PieceMoves {
     public List<ChessMove> getKingMoves() {
         moves = new ArrayList<ChessMove>();
         BiFunction<Direction, Integer, ChessMove> movement = (dir, num) -> {
-            if (num > 1) return null;
+            if (num > 1) {
+                return null;
+            }
             ChessMove move = rookStep(dir, num);
             return move != null ? move : bishopStep(dir, num);
         };

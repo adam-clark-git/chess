@@ -45,7 +45,7 @@ public class UserServiceTest {
     }
     @Test
     void loginNoAccount() throws DataAccessException {
-        assertThrows(AlreadyTakenException.class,
+        assertThrows(AuthException.class,
                 () -> service.loginUser(new LoginRequest("bobby", "pw")));
     }
     @Test

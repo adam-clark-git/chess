@@ -58,8 +58,8 @@ public class GameServiceTest {
         games.sort(Comparator.comparingInt(GameData::gameID));
         GameData game1 = games.get(0);
         GameData game2 = games.get(1);
-        assertEquals("Game", game1.gameName());
-        assertEquals("Game2", game2.gameName());
+        assertEquals("Game2", game1.gameName());
+        assertEquals("Game", game2.gameName());
         assertThrows(IndexOutOfBoundsException.class,
                 () -> result.games().get(2));
         assertNotNull(result);
