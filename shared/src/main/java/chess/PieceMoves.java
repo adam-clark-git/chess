@@ -1,236 +1,138 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class PieceMoves {
     List<ChessMove> moves = new ArrayList<ChessMove>();
     ChessBoard board;
     ChessPosition myPosition;
+
     public PieceMoves(ChessBoard board, ChessPosition myPosition) {
         this.board = board;
         this.myPosition = myPosition;
-
     }
+
     public enum Direction {
         NORTH,
-        SOUTH,
+        NORTHEAST,
         EAST,
-        WEST
+        SOUTHEAST,
+        SOUTH,
+        SOUTHWEST,
+        WEST,
+        NORTHWEST
+    }
+
+    private ChessMove rookStep(Direction dir, int num) {
+        switch (dir) {
+            case NORTH -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+num, myPosition.getColumn()), null);}
+            case SOUTH -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-num, myPosition.getColumn()), null);}
+            case EAST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow(), myPosition.getColumn()+num), null);}
+            case WEST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow(), myPosition.getColumn()-num), null);}
+        }
+        return null;
+    }
+
+    private ChessMove bishopStep(Direction dir, int num) {
+        switch (dir) {
+            case NORTHEAST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+num, myPosition.getColumn()+num), null);}
+            case NORTHWEST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+num, myPosition.getColumn()-num), null);}
+            case SOUTHEAST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-num, myPosition.getColumn()+num), null);}
+            case SOUTHWEST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-num, myPosition.getColumn()-num), null);}
+        }
+        return null;
+    }
+
+    public List<ChessMove> getRookMoves() {
+        moves = new ArrayList<ChessMove>();
+        BiFunction<Direction, Integer, ChessMove> movement = this::rookStep;
+        straightMoves(movement);
+        return moves;
     }
 
     public List<ChessMove> getBishopMoves() {
-        moves =  new ArrayList<ChessMove>();
-        BiFunction<Direction, Integer, ChessPosition> movement = (dir, magnitude) -> {
-            ChessPosition end;
-            if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn()+magnitude);
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn()-magnitude);
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn()+magnitude);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn()-magnitude);
-            }
-            return end;
-        };
-        straightMoves(movement);
-        return moves;
-    }
-    public List<ChessMove> getRookMoves() {
         moves = new ArrayList<ChessMove>();
-        BiFunction<Direction, Integer, ChessPosition> movement = (dir, magnitude) -> {
-            ChessPosition end;
-            if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn());
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn());
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+magnitude);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-magnitude);
-            }
-            return end;
-        };
+        BiFunction<Direction, Integer, ChessMove> movement = this::bishopStep;
         straightMoves(movement);
         return moves;
     }
+
     public List<ChessMove> getQueenMoves() {
         moves = new ArrayList<ChessMove>();
-        BiFunction<Direction, Integer, ChessPosition> movementRook = (dir, magnitude) -> {
-            ChessPosition end;
-            if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn());
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn());
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+magnitude);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-magnitude);
-            }
-            return end;
+        BiFunction<Direction, Integer, ChessMove> movement = (dir, num) -> {
+            ChessMove move = rookStep(dir, num);
+            return move != null ? move : bishopStep(dir, num);
         };
-        BiFunction<Direction, Integer, ChessPosition> movementBishop = (dir, magnitude) -> {
-            ChessPosition end;
-            if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn()+magnitude);
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn()-magnitude);
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow()-magnitude, myPosition.getColumn()+magnitude);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow()+magnitude, myPosition.getColumn()-magnitude);
-            }
-            return end;
-        };
-        straightMoves(movementRook);
-        straightMoves(movementBishop);
+        straightMoves(movement);
         return moves;
     }
+
     public List<ChessMove> getKnightMoves() {
         moves = new ArrayList<ChessMove>();
-        BiFunction<Direction, Integer, ChessPosition> movement1 = (dir, magnitude) -> {
-            ChessPosition end;
-            if (magnitude > 1) {
-                // Just trying to get it to return an error
-                end =  new ChessPosition(20, 20);
+        BiFunction<Direction, Integer, ChessMove> movement = (dir, num) -> {
+            if (num > 1) return null;
+            switch (dir) {
+                case NORTH -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()+1), null);}
+                case SOUTH -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()+1), null);}
+                case EAST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()-1), null);}
+                case WEST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()-1), null);}
+                case NORTHEAST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+2), null);}
+                case NORTHWEST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-2), null);}
+                case SOUTHEAST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+2), null);}
+                case SOUTHWEST -> {return new ChessMove(myPosition, new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-2), null);}
             }
-            else if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()-1);
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()+1);
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn()+1);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow()-2, myPosition.getColumn()-1);
-            }
-            return end;
+            return null;
         };
-        BiFunction<Direction, Integer, ChessPosition> movement2 = (dir, magnitude) -> {
-            ChessPosition end;
-            if (magnitude > 1) {
-                // Just trying to get it to return an error
-                end =  new ChessPosition(20, 20);
-            }
-            else if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-2);
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-2);
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+2);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+2);
-            }
-            return end;
-        };
-        straightMoves(movement1);
-        straightMoves(movement2);
+        straightMoves(movement);
         return moves;
     }
+
     public List<ChessMove> getKingMoves() {
         moves = new ArrayList<ChessMove>();
-        BiFunction<Direction, Integer, ChessPosition> movement1 = (dir, magnitude) -> {
-            ChessPosition end;
-            if (magnitude > 1) {
-                // Just trying to get it to return an error
-                end =  new ChessPosition(20, 20);
-            }
-            else if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()+1);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow(), myPosition.getColumn()-1);
-            }
-            return end;
+        BiFunction<Direction, Integer, ChessMove> movement = (dir, num) -> {
+            if (num > 1) return null;
+            ChessMove move = rookStep(dir, num);
+            return move != null ? move : bishopStep(dir, num);
         };
-        BiFunction<Direction, Integer, ChessPosition> movement2 = (dir, magnitude) -> {
-            ChessPosition end;
-            if (magnitude > 1) {
-                // Just trying to get it to return an error
-                end =  new ChessPosition(20, 20);
-            }
-            else if (dir == Direction.NORTH) {
-                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()+1);
-            }
-            else if (dir == Direction.SOUTH) {
-                end = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn()-1);
-            }
-            else if (dir == Direction.EAST) {
-                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()+1);
-            }
-            else {
-                end = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn()-1);
-            }
-            return end;
-        };
-        straightMoves(movement1);
-        straightMoves(movement2);
+        straightMoves(movement);
         return moves;
     }
 
-
     public List<ChessMove> getPawnMoves() {
-        int mult = 1;
-        if (board.getColor(myPosition) == ChessGame.TeamColor.BLACK) {
-            mult = -1;
-        }
-        int x = 1;
-        ChessMove move;
-        do {
-            move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(mult), myPosition.getColumn()+(x)));
-            if (isMoveValid(board, move) && isMoveCapture(board,move)) {
-                moveAndPromote(move);
+        moves = new ArrayList<ChessMove>();
+        int dir = (color() == ChessGame.TeamColor.BLACK) ? -1 : 1;
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+
+        for (int side : new int[]{1, -1}) {
+            ChessPosition endPos = new ChessPosition(row + dir, col + side);
+            if (isPositionValid(endPos) && isPositionCapture(endPos)) {
+                promotePiece(endPos);
             }
-            x = x * -1;
-        } while (x != 1);
-        move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(mult), myPosition.getColumn()));
-        if (isMoveValid(board, move) && !isMoveCapture(board,move)) {
-            moveAndPromote(move);
-            move = new ChessMove(myPosition, new ChessPosition(myPosition.getRow()+(2*mult), myPosition.getColumn()));
-            if (isMoveValid(board, move) && !isMoveCapture(board,move) && !board.getPiece(move.getStartPosition()).checkMoved()) {
-                if (move.getStartPosition().getRow() == 2|| move.getStartPosition().getRow() == 7) {
-                    moves.add(move);
+        }
+
+        ChessPosition endPos = new ChessPosition(row + dir, col);
+        if (isPositionValid(endPos) && !isPositionCapture(endPos)) {
+            promotePiece(endPos);
+            if ((row == 2 || row == 7) && !board.getPiece(myPosition).checkMoved()) {
+                endPos = new ChessPosition(row + (2 * dir), col);
+                if (isPositionValid(endPos) && !isPositionCapture(endPos)) {
+                    promotePiece(endPos);
                 }
             }
         }
         return moves;
-        // Implement En Passant Later
-        // Implement Promotion Later
     }
 
-
-    private void straightMoves(BiFunction<Direction,Integer,ChessPosition> movement) {
-        ChessMove move;
-        for (Direction dir : Direction.values()){
-            for (int mag = 1; mag < 10; mag++) {
-                move = new ChessMove(myPosition, movement.apply(dir,mag));
+    private void straightMoves(BiFunction<Direction, Integer, ChessMove> movement) {
+        for (Direction dir : Direction.values()) {
+            for (int i = 1; i < 9; i++) {
+                ChessMove move = movement.apply(dir, i);
+                if (move == null) {
+                    break;
+                }
                 if (isMoveValid(board, move)) {
                     moves.add(move);
                     if (isMoveCapture(board, move)) {
@@ -242,36 +144,44 @@ public class PieceMoves {
             }
         }
     }
+
+    private ChessGame.TeamColor color() {
+        return board.getColor(myPosition);
+    }
+
+    private boolean inBounds(ChessPosition p) {
+        return p.getRow() >= 1 && p.getRow() <= 8 && p.getColumn() >= 1 && p.getColumn() <= 8;
+    }
+
     private boolean isMoveValid(ChessBoard board, ChessMove move) {
-        var end = move.getEndPosition();
-        if (end.getColumn() > 8 || end.getColumn() < 1 || end.getRow() > 8 || end.getRow() < 1) {
-            return false;
-        }
-        if (board.getPiece(end) != null && board.getColor(end) == board.getColor(move.getStartPosition())) {
-            return false;
-        }
-        return true;
+        return isPositionValid(move.getEndPosition());
     }
+
     private boolean isMoveCapture(ChessBoard board, ChessMove move) {
-        var end = move.getEndPosition();
-        if (board.getPiece(end) != null && board.getColor(end) != board.getColor(move.getStartPosition())) {
-            return true;
-        }
-        return false;
+        return isPositionCapture(move.getEndPosition());
     }
-    private void moveAndPromote(ChessMove move) {
-        if (move.getEndPosition().getRow() == 8 || move.getEndPosition().getRow() == 1) {
-            ChessMove newMove;
-            for (var promotion:  ChessPiece.PieceType.values()) {
-                if (promotion == ChessPiece.PieceType.PAWN || promotion == ChessPiece.PieceType.KING) {
+
+    private boolean isPositionValid(ChessPosition p) {
+        if (!inBounds(p)) {
+            return false;
+        }
+        return board.getPiece(p) == null || board.getColor(p) != color();
+    }
+
+    private boolean isPositionCapture(ChessPosition p) {
+        return board.getPiece(p) != null && board.getColor(p) != color();
+    }
+
+    private void promotePiece(ChessPosition endPos) {
+        if (endPos.getRow() == 1 || endPos.getRow() == 8) {
+            for (ChessPiece.PieceType type : ChessPiece.PieceType.values()) {
+                if (type == ChessPiece.PieceType.PAWN || type == ChessPiece.PieceType.KING) {
                     continue;
                 }
-                newMove = new ChessMove(move.getStartPosition(), move.getEndPosition(), promotion);
-                moves.add(newMove);
+                moves.add(new ChessMove(myPosition, endPos, type));
             }
-        }
-        else {
-            moves.add(move);
+        } else {
+            moves.add(new ChessMove(myPosition, endPos, null));
         }
     }
 }
