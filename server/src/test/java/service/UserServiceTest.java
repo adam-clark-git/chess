@@ -1,8 +1,7 @@
-package passoff.server;
+package service;
 
 import dataaccess.*;
 import server.exceptions.*;
-import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import service.endpoints.LoginRequest;

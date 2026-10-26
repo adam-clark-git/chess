@@ -1,4 +1,4 @@
-package passoff.server;
+package service;
 
 import chess.ChessGame;
 import dataaccess.*;
@@ -7,7 +7,6 @@ import server.exceptions.AuthException;
 import server.exceptions.ColorTakenException;
 import server.exceptions.DataAccessException;
 import server.exceptions.GameNotFoundException;
-import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import service.endpoints.CreateGameResult;
