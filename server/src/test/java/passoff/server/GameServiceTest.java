@@ -10,6 +10,7 @@ import server.exceptions.GameNotFoundException;
 import service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import service.endpoints.CreateGameResult;
 import service.endpoints.GameRequest;
 import service.endpoints.JoinGameRequest;
 import service.endpoints.RegisterRequest;
@@ -72,8 +73,8 @@ public class GameServiceTest {
     }
     @Test
     void joinGameSuccess() throws DataAccessException {
-        int gameID = service.createGame(new GameRequest(authToken, "Game"));
-        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID));
+        CreateGameResult gameID = service.createGame(new GameRequest(authToken, "Game"));
+        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID.gameID()));
     }
     @Test
     void joinNoExistingGame() throws DataAccessException {
@@ -82,10 +83,10 @@ public class GameServiceTest {
     }
     @Test
     void joinGameWithColorTaken() throws DataAccessException {
-        int gameID = service.createGame(new GameRequest(authToken, "Game"));
-        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID));
+        CreateGameResult gameID = service.createGame(new GameRequest(authToken, "Game"));
+        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID.gameID()));
         assertThrows(ColorTakenException.class,
-                () -> service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID)));
+                () -> service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID.gameID())));
     }
 
 

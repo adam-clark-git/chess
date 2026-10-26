@@ -7,6 +7,7 @@ import server.exceptions.AuthException;
 import server.exceptions.ColorTakenException;
 import server.exceptions.DataAccessException;
 import server.exceptions.GameNotFoundException;
+import service.endpoints.CreateGameResult;
 import service.endpoints.GameRequest;
 import service.endpoints.JoinGameRequest;
 import service.endpoints.ListGamesResult;
@@ -32,7 +33,7 @@ public class GameService {
 
         return new ListGamesResult(gameDAO.listGames());
     }
-    public int createGame(GameRequest request) throws DataAccessException {
+    public CreateGameResult createGame(GameRequest request) throws DataAccessException {
         String token = request.authToken();
         AuthData auth = authDAO.checkAuth(token);
         if (auth == null) {
@@ -45,7 +46,7 @@ public class GameService {
         String white = "";
         String name = request.gameName();
         gameDAO.createGame(new GameData(gameID,white, black, name, game));
-        return gameID;
+        return new CreateGameResult(gameID);
     }
     public void joinGame(JoinGameRequest request) throws DataAccessException {
         String token = request.authToken();

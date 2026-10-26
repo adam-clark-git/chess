@@ -43,7 +43,7 @@ public class UserService {
         }
         UserData user = userDAO.getUserData(username);
         if (user == null) {
-            throw new AlreadyTakenException("Error: No user found");
+            throw new AuthException("Error: No user found");
         }
         if (!password.equals(user.password())) {
             throw new PasswordIncorrectException("Error: Password invalid");
