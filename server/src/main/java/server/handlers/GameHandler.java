@@ -15,7 +15,7 @@ public class GameHandler {
     }
 
     public void listGames(Context ctx) throws DataAccessException {
-        var request = gson.fromJson(ctx.body(), String.class);
+        String request = ctx.header("authorization");
         var result = gameService.listGames(request);
         ctx.status(200).result(gson.toJson(result));
     }

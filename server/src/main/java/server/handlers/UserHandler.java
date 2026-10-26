@@ -24,7 +24,7 @@ public class UserHandler {
         ctx.status(200).result(gson.toJson(result));
     }
     public void logoutUser(Context ctx) throws DataAccessException {
-        var request = gson.fromJson(ctx.body(), String.class);
+        String request = ctx.header("authorization");
         userService.logoutUser(request);
         ctx.status(200).result("{}");
     }
