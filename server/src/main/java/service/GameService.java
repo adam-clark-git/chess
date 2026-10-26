@@ -57,22 +57,25 @@ public class GameService {
         String username = auth.username();
         GameData gameData =  gameDAO.getGame(request.gameID());
         if (gameData == null) {
-            throw new GameNotFoundException("Game Not Found");
+            throw new GameNotFoundException("Error: Game Not Found");
         }
         GameData newGameData;
-        if (request.gameColor() == ChessGame.TeamColor.BLACK) {
+        if (request.playerColor() == ChessGame.TeamColor.BLACK) {
             if (gameData.blackUsername() != null) {
                 throw new ColorTakenException("Error: Color is taken");
             }
             newGameData = new GameData(gameData.gameID(), gameData.whiteUsername(), username, gameData.gameName(), gameData.game());
 
         }
-        else {
+        else if (request.playerColor() == ChessGame.TeamColor.WHITE) {
             if (gameData.whiteUsername() != null) {
                 throw new ColorTakenException("Error: Color is taken");
             }
             newGameData = new GameData(gameData.gameID(), username, gameData.blackUsername(), gameData.gameName(), gameData.game());
 
+        }
+        else {
+            throw new BadRequestException("Error: Color not permitted");
         }
         gameDAO.updateGame(newGameData);
 

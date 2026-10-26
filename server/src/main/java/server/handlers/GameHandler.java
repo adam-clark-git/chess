@@ -29,7 +29,7 @@ public class GameHandler {
     public void joinGame(Context ctx) throws DataAccessException {
         String token = ctx.header("authorization");
         var body = gson.fromJson(ctx.body(), JoinGameRequest.class);
-        JoinGameRequest request = new JoinGameRequest(token, body.gameColor(), body.gameID());
+        JoinGameRequest request = new JoinGameRequest(token, body.playerColor(), body.gameID());
         gameService.joinGame(request);
         ctx.status(200).result("{}");
     }

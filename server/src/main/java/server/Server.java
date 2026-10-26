@@ -43,7 +43,7 @@ public class Server {
         javalin.exception(BadRequestException.class, (e, ctx) -> sendError(ctx, 400, e));
         javalin.exception(DataAccessException.class ,(e, ctx) -> sendError(ctx, 500, e)); // Should be changed, I'm unsure of the proper error code
         javalin.exception(AuthException.class ,(e, ctx) -> sendError(ctx, 401, e));
-        javalin.exception(ColorTakenException.class ,(e, ctx) -> sendError(ctx, 400, e));
+        javalin.exception(ColorTakenException.class ,(e, ctx) -> sendError(ctx, 403, e));
         javalin.exception(AlreadyTakenException.class ,(e, ctx) -> sendError(ctx, 403, e));
         javalin.exception(GameNotFoundException.class ,(e, ctx) -> sendError(ctx, 400, e));
         javalin.exception(PasswordIncorrectException.class ,(e, ctx) -> sendError(ctx, 401, e));
