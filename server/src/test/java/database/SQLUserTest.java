@@ -70,4 +70,22 @@ public class SQLUserTest {
             throw new DataAccessException("failed to add", ex);
         }
     }
+    @Test
+    void getSuccess() throws DataAccessException {
+        UserDAO userDAO = new SQLUserDAO();
+        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
+        UserData data = userDAO.getUserData("bob");
+        assertNotNull(data);
+        assertEquals("bob", data.username());
+        assertEquals("happy@mail.com", data.email());
+        assertNotEquals("password", data.password());
+    }
+    @Test
+    void getFail() throws DataAccessException {
+        UserDAO userDAO = new SQLUserDAO();
+        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
+        assertNull(userDAO.getUserData("bobothy"));
+
+    }
+    // DO THE PASSWORD ONES LATER
 }
