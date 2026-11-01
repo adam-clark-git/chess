@@ -45,8 +45,7 @@ public class UserService {
         if (user == null) {
             throw new AuthException("Error: No user found");
         }
-        // DEFINITELY NEEDS TO BE REPLACED
-        if (!password.equals(user.password())) {
+        if (!userDAO.checkPassword(new UserData(username,password,""))) {
             throw new PasswordIncorrectException("Error: Password invalid");
         }
         String authToken = UUID.randomUUID().toString();
