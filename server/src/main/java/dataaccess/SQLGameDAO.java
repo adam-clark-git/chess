@@ -95,7 +95,7 @@ public class SQLGameDAO implements GameDAO {
         String serializedGame = new Gson().toJson(game.game());
         try (var conn = DatabaseManager.getConnection()) {
             var statement = """
-                UPDATE user SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?
+                UPDATE game SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
                 stmt.setInt(5, game.gameID());
