@@ -45,6 +45,7 @@ public class UserService {
         if (user == null) {
             throw new AuthException("Error: No user found");
         }
+        // DEFINITELY NEEDS TO BE REPLACED
         if (!password.equals(user.password())) {
             throw new PasswordIncorrectException("Error: Password invalid");
         }
