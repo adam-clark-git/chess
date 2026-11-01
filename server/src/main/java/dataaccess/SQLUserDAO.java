@@ -18,7 +18,7 @@ public class SQLUserDAO implements UserDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to clear", ex);
+            throw new DataAccessException("ERROR: failed to clear", ex);
         }
     }
     @Override
@@ -37,7 +37,7 @@ public class SQLUserDAO implements UserDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to create user", ex);
+            throw new DataAccessException("ERROR: failed to create user", ex);
         }
     }
     @Override
@@ -56,7 +56,7 @@ public class SQLUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to get user data", ex);
+            throw new DataAccessException("ERROR: failed to get user data", ex);
         }
         return null;
     }
