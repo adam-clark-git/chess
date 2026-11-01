@@ -20,4 +20,8 @@ public class MemoryUserDAO implements UserDAO {
     public UserData getUserData(String username) throws DataAccessException {
         return users.get(username);
     }
+    @Override
+    public boolean checkPassword(UserData user) throws DataAccessException {
+        return true; // shhhhhh we're not even using this anymore
+    }
 }

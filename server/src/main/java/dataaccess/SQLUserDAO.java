@@ -60,4 +60,23 @@ public class SQLUserDAO implements UserDAO {
         }
         return null;
     }
+    @Override
+    public boolean checkPassword(UserData user) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = """
+                SELECT username, password FROM user WHERE username = ?
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.setString(1, user.username());
+                try (var result = stmt.executeQuery()) {
+                    if (result.next()) {
+                        return BCrypt.hashpw(user.password(), BCrypt.gensalt()).equals(result.getString("password"));
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("ERROR: failed to get user data", ex);
+        }
+        return false;
+    }
 }
