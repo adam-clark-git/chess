@@ -1,7 +1,9 @@
 package dataaccess;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
+import model.UserData;
 import server.exceptions.DataAccessException;
 
 import java.sql.SQLException;
@@ -45,7 +47,25 @@ public class SQLGameDAO implements GameDAO {
     }
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
-
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = """
+                SELECT  whiteUsername, blackUsername, gameName, game FROM game WHERE gameID = ?
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.setInt(1, gameID);
+                try (var result = stmt.executeQuery()) {
+                    if (result.next()) {
+                        ChessGame game = new Gson().fromJson(result.getString("game"), ChessGame.class);
+                        return new GameData(gameID,
+                                result.getString("whiteUsername"), result.getString("blackUsername"),
+                                result.getString("gameName"), game);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to get game", ex);
+        }
+        return null;
     }
     @Override
     public List<GameData> listGames() throws DataAccessException {
