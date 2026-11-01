@@ -60,7 +60,7 @@ public class SQLAuthTest {
         authDAO.createAuth(new AuthData("bob2","happy2@mail.com"));
         authDAO.clear();
         var statement = """
-                SELECT authname, email, password FROM auth WHERE authToken = "bob"
+                SELECT authToken, username FROM auth WHERE authToken = "bob"
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
@@ -76,7 +76,7 @@ public class SQLAuthTest {
         AuthData data = authDAO.checkAuth("bob");
         assertNotNull(data);
         assertEquals("bob", data.authToken());
-        assertEquals("happy@mail.com", data.username());
+        assertEquals("password", data.username());
 
     }
     @Test
