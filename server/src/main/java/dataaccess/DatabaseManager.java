@@ -96,6 +96,18 @@ public class DatabaseManager {
             try (var stmt = conn.prepareStatement(statement)) {
                 stmt.executeUpdate();
             }
+            statement = """
+                CREATE TABLE IF NOT EXISTS game (
+                gameID INT PRIMARY KEY
+                whiteUsername VARCHAR(255)
+                blackUsername VARCHAR(255)
+                gameName VARCHAR(255) NOT NULL
+                game JSON NOT NULL
+                    )
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.executeUpdate();
+            }
         } catch (SQLException ex) {
             throw new DataAccessException("failed to create database", ex);
         }
