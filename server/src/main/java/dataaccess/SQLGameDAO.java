@@ -7,6 +7,7 @@ import model.UserData;
 import server.exceptions.DataAccessException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -69,7 +70,25 @@ public class SQLGameDAO implements GameDAO {
     }
     @Override
     public List<GameData> listGames() throws DataAccessException {
-
+        var list = new ArrayList<GameData>();
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = """
+                SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                try (var result = stmt.executeQuery()) {
+                    while (result.next()) {
+                        ChessGame game = new Gson().fromJson(result.getString("game"), ChessGame.class);
+                        list.add(new GameData(result.getInt("gameID"),
+                                result.getString("whiteUsername"), result.getString("blackUsername"),
+                                result.getString("gameName"), game));
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to get game", ex);
+        }
+        return list;
     }
     @Override
     public void updateGame(GameData game) throws DataAccessException {
