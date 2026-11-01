@@ -1,5 +1,7 @@
 package dataaccess;
 
+import server.exceptions.DataAccessException;
+
 import java.sql.*;
 import java.util.Properties;
 
@@ -28,7 +30,6 @@ public class DatabaseManager {
             throw new DataAccessException("failed to create database", ex);
         }
     }
-
     /**
      * Create a connection to the database and sets the catalog based upon the
      * properties specified in db.properties. Connections to the database should
@@ -73,5 +74,23 @@ public class DatabaseManager {
         var host = props.getProperty("db.host");
         var port = Integer.parseInt(props.getProperty("db.port"));
         connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
+    }
+    // Create the database tables, should be run during startup
+    private static void createTables() throws DataAccessException {
+        createDatabase();
+        try (var conn = getConnection()) {
+            var statement = """
+                CREATE TABLE IF NOT EXISTS user (
+                username VARCHAR(255) PRIMARY KEY
+                password VARCHAR(255) NOT NULL
+                email VARCHAR(255) NOT NULL
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to create database", ex);
+        }
+
     }
 }
