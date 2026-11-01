@@ -51,23 +51,23 @@ public class SQLGameTest {
             throw new DataAccessException("failed to add", ex);
         }
     }
-    /*
+
     @Test
     void addFail() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
         gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
         assertThrows(DataAccessException.class,
-                () -> gameDAO.createGame(new GameData("bob","password2","sad@mail.com")));
+                () -> gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame())));
 
     }
     @Test
     void clearSuccess() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
         gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
-        gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
+        gameDAO.createGame(new GameData(6,"white","black", "kingsgambit", new ChessGame()));
         gameDAO.clear();
         var statement = """
-                SELECT Gamename, email, password FROM Game WHERE Gamename = "bob"
+                SELECT gameName FROM Game WHERE gameID = 5
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
@@ -80,18 +80,16 @@ public class SQLGameTest {
     void getSuccess() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
         gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
-        GameData data = gameDAO.getGameData("bob");
+        GameData data = gameDAO.getGame(5);
         assertNotNull(data);
-        assertEquals("bob", data.Gamename());
-        assertEquals("happy@mail.com", data.email());
-        assertNotEquals("password", data.password());
+        assertEquals("white", data.whiteUsername());
+        assertEquals(new ChessGame(), data.game());
     }
     @Test
     void getFail() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
         gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
-        assertNull(GameDAO.getGameData("bobothy"));
+        assertNull(gameDAO.getGame(7));
     }
-     */
     // DO THE PASSWORD ONES LATER
 }
