@@ -22,7 +22,19 @@ public class SQLAuthDAO implements AuthDAO {
     }
     @Override
     public void createAuth(AuthData auth) throws DataAccessException {
-
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = """
+                INSERT INTO user (authToken, username)
+                VALUES (?, ?, ?)
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.setString(1, auth.authToken());
+                stmt.setString(2, auth.username());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to clear", ex);
+        }
     }
     @Override
     public AuthData checkAuth(String authToken) throws DataAccessException {
