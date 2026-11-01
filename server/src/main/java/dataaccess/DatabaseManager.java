@@ -76,8 +76,7 @@ public class DatabaseManager {
         connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
     }
     // Create the database tables, should be run during startup
-    private static void createTables() throws DataAccessException {
-        createDatabase();
+    public static void createTables() throws DataAccessException {
         try (var conn = getConnection()) {
             var statement = """
                 CREATE TABLE IF NOT EXISTS user (

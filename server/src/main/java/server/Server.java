@@ -24,6 +24,13 @@ public class Server {
         UserDAO userDAO = new SQLUserDAO();
         GameDAO gameDAO = new SQLGameDAO();
         AuthDAO authDAO = new SQLAuthDAO();
+        try {
+            DatabaseManager.createDatabase();
+            DatabaseManager.createTables();
+        } catch (Exception DataAccessException) {
+            System.out.println("DATABASES FAILED TO LAUNCH");
+        }
+
 
         UserHandler userHandler = new UserHandler(new UserService(userDAO, authDAO));
         GameHandler gameHandler = new GameHandler(new GameService(userDAO, authDAO, gameDAO));
