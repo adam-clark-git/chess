@@ -127,7 +127,7 @@ public class SQLGameTest {
     @Test
     void updateGameFail() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
-        gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
+        gameDAO.createGame(new GameData(5,"w","b", "k", new ChessGame()));
         gameDAO.updateGame(new GameData(7,null,"black", "kingsgambit", new ChessGame()));
         var statement = """
                 SELECT GameID, whiteUsername, blackUsername, gameName, game FROM game WHERE GameID = 7
@@ -145,9 +145,9 @@ public class SQLGameTest {
             var result = stmt.executeQuery();
             assertTrue(result.next());
             assertEquals(5, result.getInt("gameID"));
-            assertEquals("white",result.getString("whiteUsername"));
-            assertEquals("black", result.getString("blackUsername"));
-            assertEquals("kingsgambit", result.getString("gameName"));
+            assertEquals("w",result.getString("whiteUsername"));
+            assertEquals("b", result.getString("blackUsername"));
+            assertEquals("k", result.getString("gameName"));
             assertEquals(new ChessGame(), new Gson().fromJson(result.getString("game"), ChessGame.class));
         } catch (SQLException ex) {
             throw new DataAccessException("failed to update", ex);
