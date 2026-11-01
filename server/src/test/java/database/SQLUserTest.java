@@ -46,4 +46,28 @@ public class SQLUserTest {
             throw new DataAccessException("failed to add", ex);
         }
     }
+    @Test
+    void addFail() throws DataAccessException {
+        UserDAO userDAO = new SQLUserDAO();
+        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
+        assertThrows(DataAccessException.class,
+                () -> userDAO.createUser(new UserData("bob","password2","sad@mail.com")));
+
+    }
+    @Test
+    void clearSuccess() throws DataAccessException {
+        UserDAO userDAO = new SQLUserDAO();
+        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
+        userDAO.createUser(new UserData("bob2","password2","happy2@mail.com"));
+        userDAO.clear();
+        var statement = """
+                SELECT username, email, password FROM user WHERE username = "bob"
+                """;
+        try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
+            var result = stmt.executeQuery();
+            assertFalse(result.next());
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to add", ex);
+        }
+    }
 }
