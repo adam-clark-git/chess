@@ -38,7 +38,22 @@ public class SQLAuthDAO implements AuthDAO {
     }
     @Override
     public AuthData checkAuth(String authToken) throws DataAccessException {
-
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = """
+                SELECT username FROM auth WHERE authToken = ?
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.setString(1, authToken);
+                try (var result = stmt.executeQuery()) {
+                    if (result.next()) {
+                        return new AuthData(authToken, result.getString("username"));
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to clear", ex);
+        }
+        return null;
     }
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
