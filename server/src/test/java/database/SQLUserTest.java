@@ -20,32 +20,30 @@ public class SQLUserTest {
 
     @BeforeEach
     void setUp() throws DataAccessException{
-        var conn = DatabaseManager.getConnection();
         var statement = """
                 TRUNCATE TABLE user;
                 """;
-        try (var stmt = conn.prepareStatement(statement)){
+        try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             stmt.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to clear", ex);
+            throw new DataAccessException("failed to setup clear", ex);
         }
     }
     @Test
     void addSuccess() throws DataAccessException {
         UserDAO userDAO = new SQLUserDAO();
         userDAO.createUser(new UserData("bob","password","happy@mail.com"));
-        var conn = DatabaseManager.getConnection();
         var statement = """
-                SELECT username, email, password FROM user WHERE username = bob
+                SELECT username, email, password FROM user WHERE username = "bob"
                 """;
-        try (var stmt = conn.prepareStatement(statement)){
+        try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
-            result.next();
+            assertTrue(result.next());
             assertEquals("bob", result.getString("username"));
             assertNotNull(result.getString("password"));
             assertEquals("happy@mail.com", result.getString("email"));
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to clear", ex);
+            throw new DataAccessException("failed to add", ex);
         }
     }
 }
