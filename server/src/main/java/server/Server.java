@@ -21,9 +21,9 @@ public class Server {
 
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
-        UserDAO userDAO = new MemoryUserDAO();
-        GameDAO gameDAO = new MemoryGameDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        UserDAO userDAO = new SQLUserDAO();
+        GameDAO gameDAO = new SQLGameDAO();
+        AuthDAO authDAO = new SQLAuthDAO();
 
         UserHandler userHandler = new UserHandler(new UserService(userDAO, authDAO));
         GameHandler gameHandler = new GameHandler(new GameService(userDAO, authDAO, gameDAO));
