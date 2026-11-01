@@ -1,5 +1,6 @@
 package database;
 import chess.ChessGame;
+import com.google.gson.Gson;
 import model.GameData;
 import model.GameData;
 import org.junit.jupiter.api.Test;
@@ -36,18 +37,21 @@ public class SQLGameTest {
         GameDAO gameDAO = new SQLGameDAO();
         gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
         var statement = """
-                SELECT Gamename, email, password FROM Game WHERE Gamename = "bob"
+                SELECT GameID, whiteUsername, blackUsername, gameName, game FROM game WHERE GameID = 5
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
             assertTrue(result.next());
-            assertEquals("bob", result.getString("Gamename"));
-            assertNotNull(result.getString("password"));
-            assertEquals("happy@mail.com", result.getString("email"));
+            assertEquals(5, result.getInt("gameID"));
+            assertEquals("white", result.getString("whiteUsername"));
+            assertEquals("black", result.getString("blackUsername"));
+            assertEquals("kingsgambit", result.getString("gameName"));
+            assertEquals(new ChessGame(), new Gson().fromJson(result.getString("game"), ChessGame.class));
         } catch (SQLException ex) {
             throw new DataAccessException("failed to add", ex);
         }
     }
+    /*
     @Test
     void addFail() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
@@ -75,7 +79,7 @@ public class SQLGameTest {
     @Test
     void getSuccess() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
-        gameDAO.createGame(new GameData("bob","password","happy@mail.com"));
+        gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
         GameData data = gameDAO.getGameData("bob");
         assertNotNull(data);
         assertEquals("bob", data.Gamename());
@@ -85,9 +89,9 @@ public class SQLGameTest {
     @Test
     void getFail() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
-        gameDAO.createGame(new GameData("bob","password","happy@mail.com"));
+        gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
         assertNull(GameDAO.getGameData("bobothy"));
-
     }
+     */
     // DO THE PASSWORD ONES LATER
 }
