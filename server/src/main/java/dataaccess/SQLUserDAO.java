@@ -56,7 +56,7 @@ public class SQLUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to clear", ex);
+            throw new DataAccessException("failed to get user data", ex);
         }
         return null;
     }
