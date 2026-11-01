@@ -1,14 +1,12 @@
-package database;
+package dataaccess.sql;
 import chess.ChessGame;
 import com.google.gson.Gson;
-import model.GameData;
 import model.GameData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import dataaccess.*;
 import server.exceptions.DataAccessException;
-import service.ClearService;
 
 import java.sql.SQLException;
 

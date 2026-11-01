@@ -1,17 +1,16 @@
-package database;
-import model.UserData;
+package dataaccess.sql;
+import model.AuthData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import dataaccess.*;
 import server.exceptions.DataAccessException;
-import service.ClearService;
 
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SQLUserTest {
+public class SQLAuthTest {
     @BeforeAll
     static void createDB() throws DataAccessException {
         DatabaseManager.createDatabase();
@@ -21,7 +20,7 @@ public class SQLUserTest {
     @BeforeEach
     void setUp() throws DataAccessException{
         var statement = """
-                TRUNCATE TABLE user;
+                TRUNCATE TABLE auth;
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             stmt.executeUpdate();
@@ -31,37 +30,36 @@ public class SQLUserTest {
     }
     @Test
     void addSuccess() throws DataAccessException {
-        UserDAO userDAO = new SQLUserDAO();
-        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("token","bob"));
         var statement = """
-                SELECT username, email, password FROM user WHERE username = "bob"
+                SELECT authToken, username FROM auth WHERE authToken = "token"
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
             assertTrue(result.next());
+            assertEquals("token", result.getString("authToken"));
             assertEquals("bob", result.getString("username"));
-            assertNotNull(result.getString("password"));
-            assertEquals("happy@mail.com", result.getString("email"));
         } catch (SQLException ex) {
             throw new DataAccessException("failed to add", ex);
         }
     }
     @Test
     void addFail() throws DataAccessException {
-        UserDAO userDAO = new SQLUserDAO();
-        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","happy@mail.com"));
         assertThrows(DataAccessException.class,
-                () -> userDAO.createUser(new UserData("bob","password2","sad@mail.com")));
+                () -> authDAO.createAuth(new AuthData("bob","sad@mail.com")));
 
     }
     @Test
     void clearSuccess() throws DataAccessException {
-        UserDAO userDAO = new SQLUserDAO();
-        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
-        userDAO.createUser(new UserData("bob2","password2","happy2@mail.com"));
-        userDAO.clear();
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","happy@mail.com"));
+        authDAO.createAuth(new AuthData("bob2","happy2@mail.com"));
+        authDAO.clear();
         var statement = """
-                SELECT username, email, password FROM user WHERE username = "bob"
+                SELECT authToken, username FROM auth WHERE authToken = "bob"
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
@@ -72,20 +70,40 @@ public class SQLUserTest {
     }
     @Test
     void getSuccess() throws DataAccessException {
-        UserDAO userDAO = new SQLUserDAO();
-        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
-        UserData data = userDAO.getUserData("bob");
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","password"));
+        AuthData data = authDAO.checkAuth("bob");
         assertNotNull(data);
-        assertEquals("bob", data.username());
-        assertEquals("happy@mail.com", data.email());
-        assertNotEquals("password", data.password());
+        assertEquals("bob", data.authToken());
+        assertEquals("password", data.username());
+
     }
     @Test
     void getFail() throws DataAccessException {
-        UserDAO userDAO = new SQLUserDAO();
-        userDAO.createUser(new UserData("bob","password","happy@mail.com"));
-        assertNull(userDAO.getUserData("bobothy"));
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","password"));
+        assertNull(authDAO.checkAuth("bobothy"));
 
     }
-    // DO THE PASSWORD ONES LATER
+    // DO THE DELETE ONES SOON
+    @Test
+    void deleteSuccess() throws DataAccessException {
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","password"));
+        authDAO.deleteAuth("bob");
+        AuthData data = authDAO.checkAuth("bob");
+        assertNull(data);
+
+    }
+    @Test
+    void deleteFail() throws DataAccessException {
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","password"));
+        authDAO.deleteAuth("bobby");
+        AuthData data = authDAO.checkAuth("bob");
+        assertNotNull(data);
+        assertEquals("bob", data.authToken());
+        assertEquals("password", data.username());
+
+    }
 }
