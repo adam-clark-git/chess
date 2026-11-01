@@ -83,7 +83,15 @@ public class DatabaseManager {
                 CREATE TABLE IF NOT EXISTS user (
                 username VARCHAR(255) PRIMARY KEY
                 password VARCHAR(255) NOT NULL
-                email VARCHAR(255) NOT NULL
+                email VARCHAR(255) NOT NULL)
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.executeUpdate();
+            }
+            statement = """
+                CREATE TABLE IF NOT EXISTS auth (
+                authtoken VARCHAR(255) PRIMARY KEY
+                username VARCHAR(255) NOT NULL)
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
                 stmt.executeUpdate();
