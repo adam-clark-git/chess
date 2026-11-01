@@ -33,7 +33,7 @@ public class SQLAuthDAO implements AuthDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to clear", ex);
+            throw new DataAccessException("failed to create auth", ex);
         }
     }
     @Override
@@ -51,7 +51,7 @@ public class SQLAuthDAO implements AuthDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to clear", ex);
+            throw new DataAccessException("failed to check auth", ex);
         }
         return null;
     }
