@@ -70,7 +70,7 @@ public class SQLUserDAO implements UserDAO {
                 stmt.setString(1, user.username());
                 try (var result = stmt.executeQuery()) {
                     if (result.next()) {
-                        return BCrypt.hashpw(user.password(), BCrypt.gensalt()).equals(result.getString("password"));
+                        return BCrypt.checkpw(user.password(), result.getString("password"));
                     }
                 }
             }
