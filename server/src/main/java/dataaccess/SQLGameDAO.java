@@ -92,6 +92,21 @@ public class SQLGameDAO implements GameDAO {
     }
     @Override
     public void updateGame(GameData game) throws DataAccessException {
-
+        String serializedGame = new Gson().toJson(game.game());
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = """
+                UPDATE user SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.setInt(5, game.gameID());
+                stmt.setString(1, game.whiteUsername());
+                stmt.setString(2, game.blackUsername());
+                stmt.setString(3, game.gameName());
+                stmt.setString(4, serializedGame);
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to update", ex);
+        }
     }
 }
