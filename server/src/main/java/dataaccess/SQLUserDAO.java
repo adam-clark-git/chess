@@ -5,7 +5,6 @@ import server.exceptions.DataAccessException;
 
 import java.sql.SQLException;
 
-\
 
 public class SQLUserDAO implements UserDAO {
     @Override
@@ -23,7 +22,21 @@ public class SQLUserDAO implements UserDAO {
     }
     @Override
     public void createUser(UserData user) throws DataAccessException {
-
+        // NEED TO STILL ENCRYPT PASSWORDS
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = """
+                INSERT INTO user (username, password, email)
+                VALUES (?, ?, ?)
+                """;
+            try (var stmt = conn.prepareStatement(statement)) {
+                stmt.setString(1, user.username());
+                stmt.setString(2, user.password());
+                stmt.setString(3, user.email());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to create user", ex);
+        }
     }
     @Override
     public UserData getUserData(String username) throws DataAccessException {
