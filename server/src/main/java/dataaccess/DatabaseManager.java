@@ -90,7 +90,7 @@ public class DatabaseManager {
             }
             statement = """
                 CREATE TABLE IF NOT EXISTS auth (
-                authtoken VARCHAR(255) PRIMARY KEY
+                authToken VARCHAR(255) PRIMARY KEY
                 username VARCHAR(255) NOT NULL)
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
