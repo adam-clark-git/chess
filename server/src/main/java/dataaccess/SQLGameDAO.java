@@ -32,7 +32,7 @@ public class SQLGameDAO implements GameDAO {
         try (var conn = DatabaseManager.getConnection()) {
             var statement = """
                 INSERT INTO user (gameID, whiteUsername, blackUsername, gameName, game)
-                VALUES (?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
                 stmt.setInt(1, game.gameID());
@@ -43,7 +43,7 @@ public class SQLGameDAO implements GameDAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to create auth", ex);
+            throw new DataAccessException("failed to create game", ex);
         }
     }
     @Override
@@ -86,7 +86,7 @@ public class SQLGameDAO implements GameDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to get game", ex);
+            throw new DataAccessException("failed to list games", ex);
         }
         return list;
     }
