@@ -80,29 +80,31 @@ public class DatabaseManager {
         try (var conn = getConnection()) {
             var statement = """
                 CREATE TABLE IF NOT EXISTS user (
-                username VARCHAR(255) PRIMARY KEY
-                password VARCHAR(255) NOT NULL
-                email VARCHAR(255) NOT NULL)
+                username VARCHAR(255) PRIMARY KEY,
+                password VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL
+                    );
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
                 stmt.executeUpdate();
             }
             statement = """
                 CREATE TABLE IF NOT EXISTS auth (
-                authToken VARCHAR(255) PRIMARY KEY
-                username VARCHAR(255) NOT NULL)
+                authToken VARCHAR(255) PRIMARY KEY,
+                username VARCHAR(255) NOT NULL
+                    );
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
                 stmt.executeUpdate();
             }
             statement = """
                 CREATE TABLE IF NOT EXISTS game (
-                gameID INT PRIMARY KEY
-                whiteUsername VARCHAR(255)
-                blackUsername VARCHAR(255)
-                gameName VARCHAR(255) NOT NULL
+                gameID INT PRIMARY KEY,
+                whiteUsername VARCHAR(255),
+                blackUsername VARCHAR(255),
+                gameName VARCHAR(255) NOT NULL,
                 game LONGTEXT NOT NULL
-                    )
+                    );
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
                 stmt.executeUpdate();
