@@ -31,7 +31,7 @@ public class SQLGameDAO implements GameDAO {
         String serializedGame = new Gson().toJson(game.game());
         try (var conn = DatabaseManager.getConnection()) {
             var statement = """
-                INSERT INTO user (gameID, whiteUsername, blackUsername, gameName, game)
+                INSERT INTO game (gameID, whiteUsername, blackUsername, gameName, game)
                 VALUES (?, ?, ?, ?, ?)
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
