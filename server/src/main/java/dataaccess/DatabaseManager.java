@@ -102,7 +102,7 @@ public class DatabaseManager {
                 whiteUsername VARCHAR(255)
                 blackUsername VARCHAR(255)
                 gameName VARCHAR(255) NOT NULL
-                game JSON NOT NULL
+                game LONGTEXT NOT NULL
                     )
                 """;
             try (var stmt = conn.prepareStatement(statement)) {
