@@ -35,7 +35,7 @@ public class SQLGameTest {
     @Test
     void addSuccess() throws DataAccessException {
         GameDAO gameDAO = new SQLGameDAO();
-        gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
+        gameDAO.createGame(new GameData(5,null,"black", "kingsgambit", new ChessGame()));
         var statement = """
                 SELECT GameID, whiteUsername, blackUsername, gameName, game FROM game WHERE GameID = 5
                 """;
@@ -43,7 +43,7 @@ public class SQLGameTest {
             var result = stmt.executeQuery();
             assertTrue(result.next());
             assertEquals(5, result.getInt("gameID"));
-            assertEquals("white", result.getString("whiteUsername"));
+            assertNull(result.getString("whiteUsername"));
             assertEquals("black", result.getString("blackUsername"));
             assertEquals("kingsgambit", result.getString("gameName"));
             assertEquals(new ChessGame(), new Gson().fromJson(result.getString("game"), ChessGame.class));
@@ -91,5 +91,66 @@ public class SQLGameTest {
         gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
         assertNull(gameDAO.getGame(7));
     }
+    @Test
+    void listGamesSuccess() throws DataAccessException {
+        GameDAO gameDAO = new SQLGameDAO();
+        gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
+        gameDAO.createGame(new GameData(6,"white","black", "queensgambit", new ChessGame()));
+        var data = gameDAO.listGames();
+        assertNotNull(data);
+        assertEquals("kingsgambit", data.get(0).gameName());
+        assertEquals("queensgambit", data.get(1).gameName());
+        assertEquals(new ChessGame(), data.get(0).game());
+        assertEquals(new ChessGame(), data.get(1).game());
+    }
     // DO THE PASSWORD ONES LATER
+    @Test
+    void updateGameSuccess() throws DataAccessException {
+        GameDAO gameDAO = new SQLGameDAO();
+        gameDAO.createGame(new GameData(5,null,"black", "kingsgambit", new ChessGame()));
+        gameDAO.updateGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
+        var statement = """
+                SELECT GameID, whiteUsername, blackUsername, gameName, game FROM game WHERE GameID = 5
+                """;
+        try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
+            var result = stmt.executeQuery();
+            assertTrue(result.next());
+            assertEquals(5, result.getInt("gameID"));
+            assertEquals("white",result.getString("whiteUsername"));
+            assertEquals("black", result.getString("blackUsername"));
+            assertEquals("kingsgambit", result.getString("gameName"));
+            assertEquals(new ChessGame(), new Gson().fromJson(result.getString("game"), ChessGame.class));
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to update", ex);
+        }
+    }
+    @Test
+    void updateGameFail() throws DataAccessException {
+        GameDAO gameDAO = new SQLGameDAO();
+        gameDAO.createGame(new GameData(5,"white","black", "kingsgambit", new ChessGame()));
+        gameDAO.updateGame(new GameData(7,null,"black", "kingsgambit", new ChessGame()));
+        var statement = """
+                SELECT GameID, whiteUsername, blackUsername, gameName, game FROM game WHERE GameID = 7
+                """;
+        try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
+            var result = stmt.executeQuery();
+            assertFalse(result.next());
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to update", ex);
+        }
+        statement = """
+                SELECT GameID, whiteUsername, blackUsername, gameName, game FROM game WHERE GameID = 5
+                """;
+        try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
+            var result = stmt.executeQuery();
+            assertTrue(result.next());
+            assertEquals(5, result.getInt("gameID"));
+            assertEquals("white",result.getString("whiteUsername"));
+            assertEquals("black", result.getString("blackUsername"));
+            assertEquals("kingsgambit", result.getString("gameName"));
+            assertEquals(new ChessGame(), new Gson().fromJson(result.getString("game"), ChessGame.class));
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to update", ex);
+        }
+    }
 }
