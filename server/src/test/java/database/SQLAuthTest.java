@@ -87,4 +87,24 @@ public class SQLAuthTest {
 
     }
     // DO THE DELETE ONES SOON
+    @Test
+    void deleteSuccess() throws DataAccessException {
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","password"));
+        authDAO.deleteAuth("bob");
+        AuthData data = authDAO.checkAuth("bob");
+        assertNull(data);
+
+    }
+    @Test
+    void deleteFail() throws DataAccessException {
+        AuthDAO authDAO = new SQLAuthDAO();
+        authDAO.createAuth(new AuthData("bob","password"));
+        authDAO.deleteAuth("bobby");
+        AuthData data = authDAO.checkAuth("bob");
+        assertNotNull(data);
+        assertEquals("bob", data.authToken());
+        assertEquals("password", data.username());
+
+    }
 }
