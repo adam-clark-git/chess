@@ -22,7 +22,6 @@ public class SQLAuthTest {
     void setUp() throws DataAccessException{
         var statement = """
                 TRUNCATE TABLE auth;
-                TRUNCATE TABLE user;
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             stmt.executeUpdate();
@@ -35,7 +34,7 @@ public class SQLAuthTest {
         AuthDAO authDAO = new SQLAuthDAO();
         authDAO.createAuth(new AuthData("token","bob"));
         var statement = """
-                SELECT authname, email, password FROM auth WHERE authToken = "token"
+                SELECT authToken, username FROM auth WHERE authToken = "token"
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
@@ -51,17 +50,17 @@ public class SQLAuthTest {
         AuthDAO authDAO = new SQLAuthDAO();
         authDAO.createAuth(new AuthData("bob","happy@mail.com"));
         assertThrows(DataAccessException.class,
-                () -> authDAO.createAuth(new AuthData("bob","password2","sad@mail.com")));
+                () -> authDAO.createAuth(new AuthData("bob","sad@mail.com")));
 
     }
     @Test
     void clearSuccess() throws DataAccessException {
         AuthDAO authDAO = new SQLAuthDAO();
-        authDAO.createAuth(new AuthData("bob","password","happy@mail.com"));
-        authDAO.createAuth(new AuthData("bob2","password2","happy2@mail.com"));
+        authDAO.createAuth(new AuthData("bob","happy@mail.com"));
+        authDAO.createAuth(new AuthData("bob2","happy2@mail.com"));
         authDAO.clear();
         var statement = """
-                SELECT authname, email, password FROM auth WHERE authname = "bob"
+                SELECT authname, email, password FROM auth WHERE authToken = "bob"
                 """;
         try (var conn = DatabaseManager.getConnection(); var stmt = conn.prepareStatement(statement)){
             var result = stmt.executeQuery();
@@ -73,19 +72,19 @@ public class SQLAuthTest {
     @Test
     void getSuccess() throws DataAccessException {
         AuthDAO authDAO = new SQLAuthDAO();
-        authDAO.createAuth(new AuthData("bob","password","happy@mail.com"));
-        AuthData data = authDAO.getAuthData("bob");
+        authDAO.createAuth(new AuthData("bob","password"));
+        AuthData data = authDAO.checkAuth("bob");
         assertNotNull(data);
-        assertEquals("bob", data.authname());
-        assertEquals("happy@mail.com", data.email());
-        assertNotEquals("password", data.password());
+        assertEquals("bob", data.authToken());
+        assertEquals("happy@mail.com", data.username());
+
     }
     @Test
     void getFail() throws DataAccessException {
         AuthDAO authDAO = new SQLAuthDAO();
-        authDAO.createAuth(new AuthData("bob","password","happy@mail.com"));
-        assertNull(authDAO.getAuthData("bobothy"));
+        authDAO.createAuth(new AuthData("bob","password"));
+        assertNull(authDAO.checkAuth("bobothy"));
 
     }
-    // DO THE PASSWORD ONES LATER
+    // DO THE DELETE ONES SOON
 }
