@@ -4,8 +4,8 @@ import dataaccess.*;
 import server.exceptions.DataAccessException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import service.endpoints.GameRequest;
-import service.endpoints.RegisterRequest;
+import model.endpoints.GameRequest;
+import model.endpoints.RegisterRequest;
 
 public class ClearServiceTest {
     private GameService gameService;

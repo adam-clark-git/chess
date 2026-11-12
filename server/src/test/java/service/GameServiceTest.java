@@ -9,10 +9,10 @@ import server.exceptions.DataAccessException;
 import server.exceptions.GameNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import service.endpoints.CreateGameResult;
-import service.endpoints.GameRequest;
-import service.endpoints.JoinGameRequest;
-import service.endpoints.RegisterRequest;
+import model.endpoints.CreateGameResult;
+import model.endpoints.GameRequest;
+import model.endpoints.JoinGameRequest;
+import model.endpoints.RegisterRequest;
 
 import java.util.Comparator;
 import java.util.List;

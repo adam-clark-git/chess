@@ -4,10 +4,10 @@ import chess.ChessGame;
 import dataaccess.*;
 import model.*;
 import server.exceptions.*;
-import service.endpoints.CreateGameResult;
-import service.endpoints.GameRequest;
-import service.endpoints.JoinGameRequest;
-import service.endpoints.ListGamesResult;
+import model.endpoints.CreateGameResult;
+import model.endpoints.GameRequest;
+import model.endpoints.JoinGameRequest;
+import model.endpoints.ListGamesResult;
 
 import java.util.UUID;
 

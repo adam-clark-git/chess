@@ -2,10 +2,10 @@ package server.handlers;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
+import model.endpoints.GameRequest;
+import model.endpoints.JoinGameRequest;
 import server.exceptions.DataAccessException;
 import service.GameService;
-import service.UserService;
-import service.endpoints.*;
 
 public class GameHandler {
     private final GameService gameService;

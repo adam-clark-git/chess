@@ -1,9 +1,11 @@
 package server.handlers;
 
+import model.endpoints.LoginRequest;
+import model.endpoints.RegisterRequest;
+import model.endpoints.RegisterResult;
 import server.exceptions.DataAccessException;
 import service.UserService;
 import io.javalin.http.Context;
-import service.endpoints.*;
 import com.google.gson.Gson;
 
 public class UserHandler {

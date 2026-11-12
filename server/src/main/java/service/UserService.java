@@ -5,9 +5,9 @@ import dataaccess.UserDAO;
 import model.UserData;
 import model.AuthData;
 import server.exceptions.*;
-import service.endpoints.LoginRequest;
-import service.endpoints.RegisterRequest;
-import service.endpoints.RegisterResult;
+import model.endpoints.LoginRequest;
+import model.endpoints.RegisterRequest;
+import model.endpoints.RegisterResult;
 
 import java.util.UUID;
 

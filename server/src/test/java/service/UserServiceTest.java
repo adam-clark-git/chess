@@ -4,9 +4,9 @@ import dataaccess.*;
 import server.exceptions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import service.endpoints.LoginRequest;
-import service.endpoints.RegisterRequest;
-import service.endpoints.RegisterResult;
+import model.endpoints.LoginRequest;
+import model.endpoints.RegisterRequest;
+import model.endpoints.RegisterResult;
 
 import static org.junit.jupiter.api.Assertions.*;
 

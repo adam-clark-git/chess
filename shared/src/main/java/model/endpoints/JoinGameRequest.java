@@ -1,4 +1,4 @@
-package service.endpoints;
+package model.endpoints;
 
 import chess.ChessGame;
 
