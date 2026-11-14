@@ -23,7 +23,7 @@ public class ClearServiceTest {
         try{
             var registerResult = userService.registerUser(new RegisterRequest("ethan", "pw", "a@b.com"));
             authToken = registerResult.authToken();
-            gameService.createGame(new GameRequest(authToken, "Game"));
+            gameService.createGame(authToken, new GameRequest("Game"));
         } catch (DataAccessException e) {
             // This shouldn't happen
             System.out.println("ERROR ERROR SOMETHING HAS GONE TERRIBLY WRONG");

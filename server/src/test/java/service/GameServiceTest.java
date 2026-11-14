@@ -40,18 +40,18 @@ public class GameServiceTest {
     }
     @Test
     void createGameSuccess() throws DataAccessException {
-        var result = service.createGame(new GameRequest(authToken, "Game"));
+        var result = service.createGame(authToken, new GameRequest( "Game"));
         assertNotNull(result);
     }
     @Test
     void noAuthCreateGame() throws DataAccessException {
         assertThrows(AuthException.class,
-                () -> service.createGame((new GameRequest("5", "Game"))));
+                () -> service.createGame("5", (new GameRequest("Game"))));
     }
     @Test
     void listGamesSuccess() throws DataAccessException {
-        service.createGame(new GameRequest(authToken, "Game"));
-        service.createGame(new GameRequest(authToken, "Game2"));
+        service.createGame(authToken, new GameRequest("Game"));
+        service.createGame(authToken, new GameRequest( "Game2"));
         var result = service.listGames(authToken);
         List<GameData> games = result.games();
         games.sort(Comparator.comparingInt(GameData::gameID));
@@ -72,20 +72,20 @@ public class GameServiceTest {
     }
     @Test
     void joinGameSuccess() throws DataAccessException {
-        CreateGameResult gameID = service.createGame(new GameRequest(authToken, "Game"));
-        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID.gameID()));
+        CreateGameResult gameID = service.createGame(authToken, new GameRequest("Game"));
+        service.joinGame(authToken, new JoinGameRequest(ChessGame.TeamColor.WHITE, gameID.gameID()));
     }
     @Test
     void joinNoExistingGame() throws DataAccessException {
         assertThrows(GameNotFoundException.class,
-                () -> service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, 5)));
+                () -> service.joinGame(authToken, new JoinGameRequest(ChessGame.TeamColor.WHITE, 5)));
     }
     @Test
     void joinGameWithColorTaken() throws DataAccessException {
-        CreateGameResult gameID = service.createGame(new GameRequest(authToken, "Game"));
-        service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID.gameID()));
+        CreateGameResult gameID = service.createGame(authToken, new GameRequest("Game"));
+        service.joinGame(authToken, new JoinGameRequest(ChessGame.TeamColor.WHITE, gameID.gameID()));
         assertThrows(ColorTakenException.class,
-                () -> service.joinGame(new JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID.gameID())));
+                () -> service.joinGame(authToken, new JoinGameRequest(ChessGame.TeamColor.WHITE, gameID.gameID())));
     }
 
 
