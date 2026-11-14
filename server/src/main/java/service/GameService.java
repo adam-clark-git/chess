@@ -30,8 +30,7 @@ public class GameService {
 
         return new ListGamesResult(gameDAO.listGames());
     }
-    public CreateGameResult createGame(GameRequest request) throws DataAccessException {
-        String token = request.authToken();
+    public CreateGameResult createGame(String token, GameRequest request) throws DataAccessException {
         AuthData auth = authDAO.checkAuth(token);
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");
@@ -48,8 +47,7 @@ public class GameService {
         gameDAO.createGame(new GameData(gameID,white, black, name, game));
         return new CreateGameResult(gameID);
     }
-    public void joinGame(JoinGameRequest request) throws DataAccessException {
-        String token = request.authToken();
+    public void joinGame(String token, JoinGameRequest request) throws DataAccessException {
         AuthData auth = authDAO.checkAuth(token);
         if (auth == null) {
             throw new AuthException("Error: Unauthorized");

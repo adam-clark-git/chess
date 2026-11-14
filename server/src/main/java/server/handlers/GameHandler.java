@@ -22,15 +22,15 @@ public class GameHandler {
     public void createGame(Context ctx) throws DataAccessException {
         String token = ctx.header("authorization");
         var body = gson.fromJson(ctx.body(), GameRequest.class);
-        GameRequest request = new GameRequest(token, body.gameName());
-        var result = gameService.createGame(request);
+        GameRequest request = new GameRequest(body.gameName());
+        var result = gameService.createGame(token, request);
         ctx.status(200).result(gson.toJson(result));
     }
     public void joinGame(Context ctx) throws DataAccessException {
         String token = ctx.header("authorization");
         var body = gson.fromJson(ctx.body(), JoinGameRequest.class);
-        JoinGameRequest request = new JoinGameRequest(token, body.playerColor(), body.gameID());
-        gameService.joinGame(request);
+        JoinGameRequest request = new JoinGameRequest(body.playerColor(), body.gameID());
+        gameService.joinGame(token, request);
         ctx.status(200).result("{}");
     }
 
