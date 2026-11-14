@@ -3,25 +3,37 @@ import java.util.Scanner;
 import chess.*;
 import model.endpoints.RegisterRequest;
 import model.endpoints.RegisterResult;
+import server.Server;
 
 import static ui.EscapeSequences.*;
 
 public class ClientMain {
-    private final ServerFacade facade = new ServerFacade(8080);
-    private boolean loggedIn = false;
-    private String authToken = null;
+    private Server server;
+    private final ServerFacade facade;
+    private boolean loggedIn;
+    private String authToken;
+    public ClientMain() {
+        server = new Server();
+        var port = server.run(0);
+        facade = new ServerFacade(port);
+        loggedIn = false;
+    }
     public static void main(String[] args) {
-
-        System.out.println("♕ 240 Chess Client: type Help to get started");
-
 
         ClientMain client = new ClientMain();
         client.client();
     }
     private void client() {
+        System.out.print(ERASE_SCREEN);
+        System.out.println("♕ 240 Chess Client: type Help to get started");
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print("[LOGGED_OUT] >>> ");
+            if (!loggedIn) {
+                System.out.print("[LOGGED_OUT] >>> ");
+            }
+            else {
+                System.out.print("[LOGGED_IN] >>> ");
+            }
             if (!scanner.hasNextLine()) {
                 break;
             }
@@ -48,6 +60,26 @@ public class ClientMain {
                 } catch (ResponseException e) {
                     System.out.println(e.getMessage());
                 }
+            }
+        }
+        else if (command.equals("login")) {
+            if (tokens.length < 3) {
+                System.out.println("Error: Missing details");
+            } else {
+                try {
+                    authToken = facade.login(tokens[1], tokens[2]).authToken();
+                    loggedIn = true;
+                } catch (ResponseException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        else if (command.equals("clear")) {
+            try {
+                facade.clear();
+
+            } catch (ResponseException e) {
+                System.out.println(e.getMessage());
             }
         }
         else if (command.equals("quit")) {
