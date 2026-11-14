@@ -55,6 +55,11 @@ public class ServerFacade {
         var result = sendRequest(url, "PUT", body, authToken);
         receiveResponse(result, null);
     }
+    public void clear() throws ResponseException {
+        String url = serverUrl + "/db";
+        var result = sendRequest(url, "DELETE", null, null);
+        receiveResponse(result, null);
+    }
 
     private static HttpResponse<String> sendRequest(String url, String method, String body, String authToken)
             throws ResponseException {
