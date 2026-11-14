@@ -116,8 +116,14 @@ public class ClientMain {
             } else {
                 try {
                     ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(tokens[2].toUpperCase());
-                    facade.joinGame(authToken, color ,games.get(Integer.parseInt(tokens[1])-1).gameID());
-                    System.out.println("Game joined.");
+                    int gameNum = Integer.parseInt(tokens[1])-1;
+                    if (gameNum < games.size()) {
+                        facade.joinGame(authToken, color, games.get(gameNum).gameID());
+                        System.out.println("Game joined.");
+                    } else {
+                        System.out.println("No game at that id");
+                    }
+
                 } catch (ResponseException e) {
                     System.out.println(e.getMessage());
                 } catch (IllegalArgumentException e) {
@@ -129,14 +135,21 @@ public class ClientMain {
             if (tokens.length < 2) {
                 System.out.println("Error: Missing details");
             }
-            GameData game = games.get(Integer.parseInt(tokens[1])-1);
-            printBoard(game.game().getBoard(), ChessGame.TeamColor.WHITE);
-            System.out.println("^ White, V Black");
-            printBoard(game.game().getBoard(), ChessGame.TeamColor.BLACK);
+            int gameNum = Integer.parseInt(tokens[1])-1;
+            if (gameNum < games.size()) {
+                GameData game = games.get(gameNum);
+                printBoard(game.game().getBoard(), ChessGame.TeamColor.WHITE);
+                System.out.println("^ White, V Black");
+                printBoard(game.game().getBoard(), ChessGame.TeamColor.BLACK);
+            }
+            else {
+                System.out.println("Err: no game in list.");
+            }
         }
         else if (command.equals("list")) {
             try {
                 List<GameData> result = facade.listGames(authToken).games();
+                games.clear();
                 int x = 1;
                 for (GameData game : result) {
                     System.out.print(x + ". ");
