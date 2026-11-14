@@ -37,6 +37,20 @@ public class ServerFacadeTests {
         Assertions.assertThrows(ResponseException.class, () -> facade.register("player1", null, "e1@email.com"));
     }
     @Test
+    void loginPositive() throws ResponseException {
+        facade.register("player1", "password", "p1@email.com");
+        var result = facade.login("player1", "password");
+
+        Assertions.assertEquals("player1", result.username());
+        Assertions.assertNotNull(result.authToken());
+        Assertions.assertTrue(result.authToken().length() > 10);
+    }
+    @Test
+    void loginNegative() throws ResponseException {
+        facade.register("player1", "password", "p1@email.com");
+        Assertions.assertThrows(ResponseException.class, () -> facade.login("player1", null));
+    }
+    @Test
     public void sampleTest() {
         Assertions.assertTrue(true);
     }
