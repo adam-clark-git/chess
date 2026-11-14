@@ -25,6 +25,7 @@ public class ServerFacade {
         String url = serverUrl + "/user";
         String body = gson.toJson(new RegisterRequest(username, password, email));
         var result = sendRequest(url, "POST", body);
+        var interpreted_result = receiveResponse(result, RegisterResult.class);
     }
     /*
     public static void main(String[] args) throws Exception {
@@ -59,10 +60,16 @@ public class ServerFacade {
         }
     }
 
-    private static void receiveResponse(HttpResponse<String> response) {
-        var statusCode = response.statusCode();
-
-        var responseBody = new Gson().fromJson(response.body(), Map.class);
-        System.out.printf("= Response =========\n[%d]\n\n%s\n\n", statusCode, responseBody);
+    private <T> T receiveResponse(HttpResponse<String> response, Class<T> responseClass) throws ResponseException {
+        int statusCode = response.statusCode();
+        if (statusCode < 200 || statusCode >= 300) {
+            var error = gson.fromJson(response.body(), Map.class);
+            throw new ResponseException((String) error.get("message"));
+        }
+        if (responseClass == null) {
+            return null;
+        }
+        var responseBody = new Gson().fromJson(response.body(), responseClass);
+        return responseBody;
     }
 }
