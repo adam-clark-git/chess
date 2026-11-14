@@ -10,6 +10,8 @@ public class ClientMain {
         Scanner scanner = new Scanner(System.in);
         System.out.println("♕ 240 Chess Client: " + piece);
         boolean loggedIn = false;
+        ChessGame game = new ChessGame();
+        BoardRenderer.printBoard(game.getBoard(), ChessGame.TeamColor.WHITE);
         while (true) {
             System.out.print("[LOGGED_OUT] >>> ");
             if (!scanner.hasNextLine()) {
