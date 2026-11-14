@@ -6,21 +6,17 @@ import chess.*;
 import model.GameData;
 import model.endpoints.RegisterRequest;
 import model.endpoints.RegisterResult;
-import server.Server;
 
 import static client.BoardRenderer.printBoard;
 import static ui.EscapeSequences.*;
 
 public class ClientMain {
-    private Server server;
     private final ServerFacade facade;
     private boolean loggedIn;
     private String authToken;
     private List<GameData> games = new ArrayList<>();
     public ClientMain() {
-        server = new Server();
-        var port = server.run(0);
-        facade = new ServerFacade(port);
+        facade = new ServerFacade(8080);
         loggedIn = false;
     }
     public static void main(String[] args) {
