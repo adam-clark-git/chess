@@ -15,41 +15,44 @@ public class BoardRenderer {
         List<String> letters = new ArrayList<>(List.of("a","b","c","d","e","f","g","h"));
         for (int i = 0; i <= 9; i++) {
             for (int j = 0; j <= 9; j++) {
-                if (i > 0 && i < 9 && j > 0 && j < 9) {
-                    if ((i + j) % 2 == 0) {
-                        System.out.print(SET_BG_COLOR_WHITE);
-                    } else {
-                        System.out.print(SET_BG_COLOR_BLACK);
-                    }
-                    if (color.equals(ChessGame.TeamColor.BLACK)) {
-                        System.out.print(translatePiece(board.getPiece(new ChessPosition(i, 9-j))));
-                    } else {
-                        System.out.print(translatePiece(board.getPiece(new ChessPosition(9-i,j))));
-                    }
-                    System.out.print(RESET_TEXT_COLOR);
-                } else {
-                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
-                    if ((i == 0 || i == 9) && (j == 0 || j == 9)) {
-                        System.out.print(EMPTY);
-                    } else if (i == 0 || i == 9) {
-                        if (color.equals(ChessGame.TeamColor.BLACK)) {
-                            System.out.print(" "+letters.get(8-(j))+"\u2003");
-                        } else {
-                            System.out.print(" " + letters.get(j - 1) + "\u2003");
-                        }
-                    } else {
-                        if (color.equals(ChessGame.TeamColor.BLACK)) {
-                            System.out.print(" " + i+"\u2003");
-                        }else {
-                            System.out.print(" " + (9-i) + "\u2003");
-                        }
-                    }
-                }
-
+                printPosition(i,j,board,color,letters);
             }
             System.out.println();
         }
         System.out.print(RESET_BG_COLOR);
+    }
+    static void printPosition(int i, int j, ChessBoard board, ChessGame.TeamColor color, List<String> letters) {
+        if (i > 0 && i < 9 && j > 0 && j < 9) {
+            if ((i + j) % 2 == 0) {
+                System.out.print(SET_BG_COLOR_WHITE);
+            } else {
+                System.out.print(SET_BG_COLOR_BLACK);
+            }
+            if (color.equals(ChessGame.TeamColor.BLACK)) {
+                System.out.print(translatePiece(board.getPiece(new ChessPosition(i, 9-j))));
+            } else {
+                System.out.print(translatePiece(board.getPiece(new ChessPosition(9-i,j))));
+            }
+            System.out.print(RESET_TEXT_COLOR);
+            return;
+        }
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        if ((i == 0 || i == 9) && (j == 0 || j == 9)) {
+            System.out.print(EMPTY);
+        } else if (i == 0 || i == 9) {
+            if (color.equals(ChessGame.TeamColor.BLACK)) {
+                System.out.print(" "+letters.get(8-(j))+"\u2003");
+            } else {
+                System.out.print(" " + letters.get(j - 1) + "\u2003");
+            }
+        } else {
+            if (color.equals(ChessGame.TeamColor.BLACK)) {
+                System.out.print(" " + i+"\u2003");
+            }else {
+                System.out.print(" " + (9-i) + "\u2003");
+            }
+        }
+
     }
     static String translatePiece(ChessPiece piece) {
         if (piece == null) {
