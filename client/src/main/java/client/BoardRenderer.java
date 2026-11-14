@@ -22,9 +22,9 @@ public class BoardRenderer {
                         System.out.print(SET_BG_COLOR_BLACK);
                     }
                     if (color.equals(ChessGame.TeamColor.BLACK)) {
-                        System.out.print(translatePiece(board.getPiece(new ChessPosition(9-i,9-j))));
+                        System.out.print(translatePiece(board.getPiece(new ChessPosition(i, 9-j))));
                     } else {
-                        System.out.print(translatePiece(board.getPiece(new ChessPosition(i, j))));
+                        System.out.print(translatePiece(board.getPiece(new ChessPosition(9-i,j))));
                     }
                     System.out.print(RESET_TEXT_COLOR);
                 } else {
@@ -56,7 +56,7 @@ public class BoardRenderer {
             return EMPTY;
         }
         if (piece.getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
-            String color = SET_TEXT_COLOR_BLUE;
+            String color = SET_TEXT_COLOR_RED;
             switch (piece.getPieceType()) {
                 case KING -> {return color+WHITE_KING;}
                 case QUEEN -> {return color+WHITE_QUEEN;}
@@ -67,7 +67,7 @@ public class BoardRenderer {
                 case null -> {return EMPTY;}
             }
         } else {
-            String color = SET_TEXT_COLOR_RED;
+            String color = SET_TEXT_COLOR_BLUE;
             switch (piece.getPieceType()) {
                 case KING -> {return color+BLACK_KING;}
                 case QUEEN -> {return color+BLACK_QUEEN;}
