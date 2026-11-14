@@ -60,6 +60,17 @@ public class ServerFacadeTests {
     void logoutNegative() throws ResponseException {
         Assertions.assertThrows(ResponseException.class, () -> facade.logout(null));
     }
-
+    @Test
+    void createGamePositive() throws ResponseException {
+        var item = facade.register("player1", "password", "p1@email.com");
+        String authToken = item.authToken();
+        var result = facade.createGame(authToken, "cool");
+        Assertions.assertNotNull(result.gameID());
+        Assertions.assertTrue(result.gameID() > 1000);
+    }
+    @Test
+    void createGameNegative() throws ResponseException {
+        Assertions.assertThrows(ResponseException.class, () -> facade.createGame(null, "coolgame"));
+    }
 
 }
