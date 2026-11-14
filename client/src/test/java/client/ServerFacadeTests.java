@@ -23,7 +23,14 @@ public class ServerFacadeTests {
         server.stop();
     }
 
+    @Test
+    void registerPositive() throws ResponseException {
+        var result = facade.register("player1", "password", "p1@email.com");
 
+        Assertions.assertEquals("player1", result.username());
+        Assertions.assertNotNull(result.authToken());
+        Assertions.assertTrue(result.authToken().length() > 10);
+    }
     @Test
     public void sampleTest() {
         Assertions.assertTrue(true);
