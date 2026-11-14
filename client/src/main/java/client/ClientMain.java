@@ -12,6 +12,7 @@ public class ClientMain {
         boolean loggedIn = false;
         ChessGame game = new ChessGame();
         BoardRenderer.printBoard(game.getBoard(), ChessGame.TeamColor.WHITE);
+        BoardRenderer.printBoard(game.getBoard(), ChessGame.TeamColor.BLACK);
         while (true) {
             System.out.print("[LOGGED_OUT] >>> ");
             if (!scanner.hasNextLine()) {
