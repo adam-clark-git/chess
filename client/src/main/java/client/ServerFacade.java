@@ -15,21 +15,18 @@ import java.util.Map;
 public class ServerFacade {
     private final String serverUrl;
     private final Gson gson = new Gson();
+    private static final HttpClient client = HttpClient.newHttpClient();
     public ServerFacade(String port) {
         serverUrl = "http://localhost:" + port;
     }
 
     public void register(String username, String password, String email)  throws Exception {
         RegisterRequest request = new RegisterRequest(username,password,email);
-        try {
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String url = serverUrl + "/user";
+        String body = gson.toJson(new RegisterRequest(username, password, email));
+        var result = sendRequest(url, "POST", body);
     }
-
-    private static final HttpClient client = HttpClient.newHttpClient();
-
+    /*
     public static void main(String[] args) throws Exception {
         if (args.length >= 2) {
             var method = args[0];
@@ -43,9 +40,11 @@ public class ServerFacade {
             System.out.println("ClientCurlExample <method> <url> [<body>]");
         }
     }
-
+    */
     private static HttpResponse<String> sendRequest(String url, String method, String body)
             throws InterruptedException, IOException {
+        // Need to create a new URL based on the path and what the function needs
+        // Need to convert into a JSON object before passing it into string
         var request = HttpRequest.newBuilder(URI.create(url))
                 .method(method, requestBodyPublisher(body))
                 .build();
