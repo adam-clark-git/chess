@@ -5,25 +5,46 @@ import chess.*;
 import static ui.EscapeSequences.*;
 
 public class ClientMain {
+    private final ServerFacade facade = new ServerFacade(0);
+    private boolean loggedIn = false;
+    private String authToken = null;
     public static void main(String[] args) {
-        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+
+        System.out.println("♕ 240 Chess Client: type Help to get started");
+
+
+        ClientMain client = new ClientMain();
+        client.client();
+    }
+    private void client() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("♕ 240 Chess Client: " + piece);
-        boolean loggedIn = false;
-        ChessGame game = new ChessGame();
-        BoardRenderer.printBoard(game.getBoard(), ChessGame.TeamColor.WHITE);
-        BoardRenderer.printBoard(game.getBoard(), ChessGame.TeamColor.BLACK);
         while (true) {
             System.out.print("[LOGGED_OUT] >>> ");
             if (!scanner.hasNextLine()) {
                 break;
             }
-            String line = scanner.nextLine().toLowerCase();
-            if (line.equals("help")) {
-                help();
+            String line = scanner.nextLine();
+            String[] tokens = line.trim().split("\\s+");
+            String command = tokens[0].toLowerCase();
+            if (!loggedIn) {
+                prelogin(command, tokens);
             }
-            else {
-                break;
+
+        }
+    }
+    private void prelogin(String command, String[] tokens) {
+        if (command.equals("help")) {
+            help();
+        }
+        else if (command.equals("register")) {
+            if (tokens.length < 4) {
+                System.out.println("Error: Missing details");
+            } else {
+                try {
+                    facade.register(tokens[1], tokens[2], tokens[3]);
+                } catch (ResponseException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
     }
