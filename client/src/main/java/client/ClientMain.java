@@ -43,6 +43,9 @@ public class ClientMain {
             if (!loggedIn) {
                 prelogin(command, tokens);
             }
+            else {
+                postlogin(command, tokens);
+            }
 
         }
     }
@@ -86,10 +89,56 @@ public class ClientMain {
             System.exit(0);
         }
     }
-    private static void help() {
-        System.out.println(SET_TEXT_COLOR_BLUE + "register <USERNAME> <PASSWORD> <EMAIL>" + RESET_TEXT_COLOR + " - Creates a new account\n" +
-                SET_TEXT_COLOR_BLUE + "login <USERNAME> <PASSWORD>" + RESET_TEXT_COLOR + " - Logins into existing account\n" +
-                SET_TEXT_COLOR_BLUE + "quit" + RESET_TEXT_COLOR + " - Stop running program\n" +
+    private void postlogin(String command, String[] tokens) {
+        if (command.equals("help")) {
+            help();
+        }
+        else if (command.equals("register")) {
+            if (tokens.length < 4) {
+                System.out.println("Error: Missing details");
+            } else {
+                try {
+                    authToken = facade.register(tokens[1], tokens[2], tokens[3]).authToken();
+                    loggedIn = true;
+                } catch (ResponseException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        else if (command.equals("logout")) {
+            try {
+                facade.logout(authToken);
+                loggedIn = false;
+            } catch (ResponseException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        else if (command.equals("clear")) {
+            try {
+                facade.clear();
+
+            } catch (ResponseException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        else if (command.equals("quit")) {
+            System.exit(0);
+        }
+    }
+    private void help() {
+        if (!loggedIn) {
+            System.out.println(SET_TEXT_COLOR_BLUE + "register <USERNAME> <PASSWORD> <EMAIL>" + RESET_TEXT_COLOR + " - Creates a new account\n" +
+                    SET_TEXT_COLOR_BLUE + "login <USERNAME> <PASSWORD>" + RESET_TEXT_COLOR + " - Logins into existing account");
+        }
+        else {
+            System.out.println(SET_TEXT_COLOR_BLUE + "create <GAMENAME>" + RESET_TEXT_COLOR + " - Creates a new game\n" +
+                    SET_TEXT_COLOR_BLUE + "list" + RESET_TEXT_COLOR + " - Lists all existing games\n" +
+                    SET_TEXT_COLOR_BLUE + "join <ID> <WHITE|BLACK>" + RESET_TEXT_COLOR + " - Joins an existing game\n" +
+                    SET_TEXT_COLOR_BLUE + "observe <ID>" + RESET_TEXT_COLOR + " - Observes an existing game\n" +
+                    SET_TEXT_COLOR_BLUE + "logout" + RESET_TEXT_COLOR + " - Logs out of account");
+
+        }
+        System.out.println(SET_TEXT_COLOR_BLUE + "quit" + RESET_TEXT_COLOR + " - Stop running program\n" +
                 SET_TEXT_COLOR_BLUE + "help" + RESET_TEXT_COLOR + " - Displays possible commands\n");
     }
 }
