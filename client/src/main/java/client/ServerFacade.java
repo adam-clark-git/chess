@@ -26,6 +26,18 @@ public class ServerFacade {
         var result = sendRequest(url, "POST", body);
         return receiveResponse(result, RegisterResult.class);
     }
+    public RegisterResult login(String username, String password) throws ResponseException {
+        String url = serverUrl + "/session";
+        String body = gson.toJson(new LoginRequest(username, password));
+        var result = sendRequest(url, "POST", body);
+        return receiveResponse(result, RegisterResult.class);
+    }
+    public void logout(String authToken) throws ResponseException {
+        String url = serverUrl + "/session";
+        String body = gson.toJson(authToken);
+        var result = sendRequest(url, "POST", body);
+        receiveResponse(result, null);
+    }
 
     private static HttpResponse<String> sendRequest(String url, String method, String body)
             throws ResponseException {
