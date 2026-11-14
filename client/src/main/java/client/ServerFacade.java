@@ -25,47 +25,47 @@ public class ServerFacade {
     public RegisterResult register(String username, String password, String email)  throws ResponseException {
         String url = serverUrl + "/user";
         String body = gson.toJson(new RegisterRequest(username, password, email));
-        var result = sendRequest(url, "POST", body);
+        var result = sendRequest(url, "POST", body, null);
         return receiveResponse(result, RegisterResult.class);
     }
     public RegisterResult login(String username, String password) throws ResponseException {
         String url = serverUrl + "/session";
         String body = gson.toJson(new LoginRequest(username, password));
-        var result = sendRequest(url, "POST", body);
+        var result = sendRequest(url, "POST", body, null);
         return receiveResponse(result, RegisterResult.class);
     }
     public void logout(String authToken) throws ResponseException {
         String url = serverUrl + "/session";
-        String body = gson.toJson(authToken);
-        var result = sendRequest(url, "DELETE", body);
+        var result = sendRequest(url, "DELETE", null, authToken);
         receiveResponse(result, null);
     }
     public ListGamesResult listGames(String authToken) throws ResponseException {
         String url = serverUrl + "/game";
-        String body = gson.toJson(authToken);
-        var result = sendRequest(url, "GET", body);
+        var result = sendRequest(url, "GET", null, authToken);
         return receiveResponse(result, ListGamesResult.class);
     }
     public CreateGameResult createGame(String authToken, String gameName) throws ResponseException {
         String url = serverUrl + "/game";
         String body = gson.toJson(new GameRequest(authToken, gameName));
-        var result = sendRequest(url, "POST", body);
+        var result = sendRequest(url, "POST", body, authToken);
         return receiveResponse(result, CreateGameResult.class);
     }
     public void joinGame(String authToken, ChessGame.TeamColor playerColor, int gameID) throws ResponseException {
         String url = serverUrl + "/game";
         String body = gson.toJson(new JoinGameRequest(authToken, playerColor, gameID));
-        var result = sendRequest(url, "POST", body);
+        var result = sendRequest(url, "PUT", body, authToken);
         receiveResponse(result, CreateGameResult.class);
     }
 
-    private static HttpResponse<String> sendRequest(String url, String method, String body)
+    private static HttpResponse<String> sendRequest(String url, String method, String body, String authToken)
             throws ResponseException {
         try {
-            var request = HttpRequest.newBuilder(URI.create(url))
-                    .method(method, requestBodyPublisher(body))
-                    .build();
-            return client.send(request, BodyHandlers.ofString());
+            var builder = HttpRequest.newBuilder(URI.create(url))
+                    .method(method, requestBodyPublisher(body));
+            if (authToken != null) {
+                builder.header("authorization", authToken);
+            }
+            return client.send(builder.build(), BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             throw new ResponseException("Could not reach the server.");
         }
