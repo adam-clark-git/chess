@@ -26,6 +26,7 @@ public class BoardRenderer {
                     } else {
                         System.out.print(translatePiece(board.getPiece(new ChessPosition(i, j))));
                     }
+                    System.out.print(RESET_TEXT_COLOR);
                 } else {
                     System.out.print(SET_BG_COLOR_LIGHT_GREY);
                     if ((i == 0 || i == 9) && (j == 0 || j == 9)) {
@@ -55,23 +56,25 @@ public class BoardRenderer {
             return EMPTY;
         }
         if (piece.getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+            String color = SET_TEXT_COLOR_BLUE;
             switch (piece.getPieceType()) {
-                case KING -> {return WHITE_KING;}
-                case QUEEN -> {return WHITE_QUEEN;}
-                case PAWN -> {return WHITE_PAWN;}
-                case BISHOP -> {return WHITE_BISHOP;}
-                case ROOK -> {return WHITE_ROOK;}
-                case KNIGHT -> {return WHITE_KNIGHT;}
+                case KING -> {return color+WHITE_KING;}
+                case QUEEN -> {return color+WHITE_QUEEN;}
+                case PAWN -> {return color+WHITE_PAWN;}
+                case BISHOP -> {return color+WHITE_BISHOP;}
+                case ROOK -> {return color+WHITE_ROOK;}
+                case KNIGHT -> {return color+WHITE_KNIGHT;}
                 case null -> {return EMPTY;}
             }
         } else {
+            String color = SET_TEXT_COLOR_RED;
             switch (piece.getPieceType()) {
-                case KING -> {return BLACK_KING;}
-                case QUEEN -> {return BLACK_QUEEN;}
-                case PAWN -> {return BLACK_PAWN;}
-                case BISHOP -> {return BLACK_BISHOP;}
-                case ROOK -> {return BLACK_ROOK;}
-                case KNIGHT -> {return BLACK_KNIGHT;}
+                case KING -> {return color+BLACK_KING;}
+                case QUEEN -> {return color+BLACK_QUEEN;}
+                case PAWN -> {return color+BLACK_PAWN;}
+                case BISHOP -> {return color+BLACK_BISHOP;}
+                case ROOK -> {return color+BLACK_ROOK;}
+                case KNIGHT -> {return color+BLACK_KNIGHT;}
                 case null -> {return EMPTY;}
             }
         }
