@@ -35,8 +35,20 @@ public class ServerFacade {
     public void logout(String authToken) throws ResponseException {
         String url = serverUrl + "/session";
         String body = gson.toJson(authToken);
-        var result = sendRequest(url, "POST", body);
+        var result = sendRequest(url, "DELETE", body);
         receiveResponse(result, null);
+    }
+    public ListGamesResult listGames(String authToken) throws ResponseException {
+        String url = serverUrl + "/game";
+        String body = gson.toJson(authToken);
+        var result = sendRequest(url, "GET", body);
+        return receiveResponse(result, ListGamesResult.class);
+    }
+    public CreateGameResult createGame(String authToken, String gameName) throws ResponseException {
+        String url = serverUrl + "/game";
+        String body = gson.toJson(authToken);
+        var result = sendRequest(url, "POST", body);
+        return receiveResponse(result, CreateGameResult.class);
     }
 
     private static HttpResponse<String> sendRequest(String url, String method, String body)
