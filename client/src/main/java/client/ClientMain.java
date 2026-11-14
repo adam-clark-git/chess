@@ -1,4 +1,5 @@
 package client;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import chess.*;
@@ -14,6 +15,7 @@ public class ClientMain {
     private final ServerFacade facade;
     private boolean loggedIn;
     private String authToken;
+    private List<GameData> games = new ArrayList<>();
     public ClientMain() {
         server = new Server();
         var port = server.run(0);
@@ -101,7 +103,7 @@ public class ClientMain {
             } else {
                 try {
                     int gameID = facade.createGame(authToken, tokens[1]).gameID();
-                    System.out.println("Game created - ID: " + gameID);
+                    System.out.println("Game created.");
                 } catch (ResponseException e) {
                     System.out.println(e.getMessage());
                 }
@@ -113,7 +115,7 @@ public class ClientMain {
             } else {
                 try {
                     ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(tokens[2].toUpperCase());
-                    facade.joinGame(authToken, color ,Integer.parseInt(tokens[1]));
+                    facade.joinGame(authToken, color ,games.get(Integer.parseInt(tokens[1])-1).gameID());
                     System.out.println("Game joined.");
                 } catch (ResponseException e) {
                     System.out.println(e.getMessage());
@@ -125,8 +127,12 @@ public class ClientMain {
         else if (command.equals("list")) {
             try {
                 List<GameData> result = facade.listGames(authToken).games();
+                int x = 1;
                 for (GameData game : result) {
+                    System.out.print(x + ". ");
                     printGame(game);
+                    games.add(game);
+                    x++;
                 }
             } catch (ResponseException e) {
                 System.out.println(e.getMessage());
@@ -153,7 +159,7 @@ public class ClientMain {
         }
     }
     private void printGame(GameData game) {
-        System.out.println("Name: " + game.gameName() + " Black: " + game.blackUsername()+ " White: " + game.whiteUsername() + " ID: " + game.gameID());
+        System.out.println(game.gameName() + " (Black: " + game.blackUsername()+ " White: " + game.whiteUsername() + ") ");
     }
     private void help() {
         if (!loggedIn) {
