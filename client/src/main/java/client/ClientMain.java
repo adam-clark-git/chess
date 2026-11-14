@@ -1,11 +1,13 @@
 package client;
 import java.util.Scanner;
 import chess.*;
+import model.endpoints.RegisterRequest;
+import model.endpoints.RegisterResult;
 
 import static ui.EscapeSequences.*;
 
 public class ClientMain {
-    private final ServerFacade facade = new ServerFacade(0);
+    private final ServerFacade facade = new ServerFacade(8080);
     private boolean loggedIn = false;
     private String authToken = null;
     public static void main(String[] args) {
@@ -41,11 +43,15 @@ public class ClientMain {
                 System.out.println("Error: Missing details");
             } else {
                 try {
-                    facade.register(tokens[1], tokens[2], tokens[3]);
+                    authToken = facade.register(tokens[1], tokens[2], tokens[3]).authToken();
+                    loggedIn = true;
                 } catch (ResponseException e) {
                     System.out.println(e.getMessage());
                 }
             }
+        }
+        else if (command.equals("quit")) {
+            System.exit(0);
         }
     }
     private static void help() {
