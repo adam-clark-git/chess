@@ -51,6 +51,16 @@ public class ServerFacadeTests {
         Assertions.assertThrows(ResponseException.class, () -> facade.login("player1", null));
     }
     @Test
+    void logoutPositive() throws ResponseException {
+        var item = facade.register("player1", "password", "p1@email.com");
+        String authToken = item.authToken();
+        Assertions.assertDoesNotThrow(()->facade.logout(authToken));
+    }
+    @Test
+    void logoutNegative() throws ResponseException {
+        Assertions.assertThrows(ResponseException.class, () -> facade.logout(null));
+    }
+    @Test
     public void sampleTest() {
         Assertions.assertTrue(true);
     }
