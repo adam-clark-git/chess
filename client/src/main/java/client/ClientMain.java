@@ -1,6 +1,8 @@
 package client;
+import java.util.List;
 import java.util.Scanner;
 import chess.*;
+import model.GameData;
 import model.endpoints.RegisterRequest;
 import model.endpoints.RegisterResult;
 import server.Server;
@@ -93,16 +95,41 @@ public class ClientMain {
         if (command.equals("help")) {
             help();
         }
-        else if (command.equals("register")) {
-            if (tokens.length < 4) {
+        else if (command.equals("create")) {
+            if (tokens.length < 2) {
                 System.out.println("Error: Missing details");
             } else {
                 try {
-                    authToken = facade.register(tokens[1], tokens[2], tokens[3]).authToken();
-                    loggedIn = true;
+                    int gameID = facade.createGame(authToken, tokens[1]).gameID();
+                    System.out.println("Game created - ID: " + gameID);
                 } catch (ResponseException e) {
                     System.out.println(e.getMessage());
                 }
+            }
+        }
+        else if (command.equals("join")) {
+            if (tokens.length < 3) {
+                System.out.println("Error: Missing details");
+            } else {
+                try {
+                    ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(tokens[2].toUpperCase());
+                    facade.joinGame(authToken, color ,Integer.parseInt(tokens[1]));
+                    System.out.println("Game joined.");
+                } catch (ResponseException e) {
+                    System.out.println(e.getMessage());
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Color must be white or black.");
+                }
+            }
+        }
+        else if (command.equals("list")) {
+            try {
+                List<GameData> result = facade.listGames(authToken).games();
+                for (GameData game : result) {
+                    printGame(game);
+                }
+            } catch (ResponseException e) {
+                System.out.println(e.getMessage());
             }
         }
         else if (command.equals("logout")) {
@@ -124,6 +151,9 @@ public class ClientMain {
         else if (command.equals("quit")) {
             System.exit(0);
         }
+    }
+    private void printGame(GameData game) {
+        System.out.println("Name: " + game.gameName() + " Black: " + game.blackUsername()+ " White: " + game.whiteUsername() + " ID: " + game.gameID());
     }
     private void help() {
         if (!loggedIn) {
