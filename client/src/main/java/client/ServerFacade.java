@@ -18,7 +18,7 @@ public class ServerFacade {
     private final String serverUrl;
     private final Gson gson = new Gson();
     private static final HttpClient client = HttpClient.newHttpClient();
-    public ServerFacade(String port) {
+    public ServerFacade(int port) {
         serverUrl = "http://localhost:" + port;
     }
 
