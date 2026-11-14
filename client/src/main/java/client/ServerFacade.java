@@ -1,4 +1,5 @@
 package client;
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.endpoints.*;
@@ -10,6 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.*;
 import java.net.http.HttpRequest.*;
+import chess.ChessGame;
 import java.util.Map;
 
 public class ServerFacade {
@@ -46,9 +48,15 @@ public class ServerFacade {
     }
     public CreateGameResult createGame(String authToken, String gameName) throws ResponseException {
         String url = serverUrl + "/game";
-        String body = gson.toJson(authToken);
+        String body = gson.toJson(new GameRequest(authToken, gameName));
         var result = sendRequest(url, "POST", body);
         return receiveResponse(result, CreateGameResult.class);
+    }
+    public void joinGame(String authToken, ChessGame.TeamColor playerColor, int gameID) throws ResponseException {
+        String url = serverUrl + "/game";
+        String body = gson.toJson(new JoinGameRequest(authToken, playerColor, gameID));
+        var result = sendRequest(url, "POST", body);
+        receiveResponse(result, CreateGameResult.class);
     }
 
     private static HttpResponse<String> sendRequest(String url, String method, String body)
