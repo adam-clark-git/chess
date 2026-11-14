@@ -8,6 +8,7 @@ import model.endpoints.RegisterRequest;
 import model.endpoints.RegisterResult;
 import server.Server;
 
+import static client.BoardRenderer.printBoard;
 import static ui.EscapeSequences.*;
 
 public class ClientMain {
@@ -123,6 +124,15 @@ public class ClientMain {
                     System.out.println("Color must be white or black.");
                 }
             }
+        }
+        else if (command.equals("observe")) {
+            if (tokens.length < 2) {
+                System.out.println("Error: Missing details");
+            }
+            GameData game = games.get(Integer.parseInt(tokens[1])-1);
+            printBoard(game.game().getBoard(), ChessGame.TeamColor.WHITE);
+            System.out.println("^ White, V Black");
+            printBoard(game.game().getBoard(), ChessGame.TeamColor.BLACK);
         }
         else if (command.equals("list")) {
             try {
