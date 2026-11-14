@@ -11,7 +11,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.*;
 import java.net.http.HttpRequest.*;
-import chess.ChessGame;
 import java.util.Map;
 
 public class ServerFacade {
@@ -71,7 +70,7 @@ public class ServerFacade {
         }
     }
 
-    private static BodyPublisher requestBodyPublisher(String body) throws IOException {
+    private static BodyPublisher requestBodyPublisher(String body) {
         if (body != null) {
             return BodyPublishers.ofString(body);
         } else {
@@ -82,11 +81,12 @@ public class ServerFacade {
     private <T> T receiveResponse(HttpResponse<String> response, Class<T> responseClass) throws ResponseException {
         int statusCode = response.statusCode();
         if (statusCode < 200 || statusCode >= 300) {
+            String message = "Request Failed.";
             var error = gson.fromJson(response.body(), Map.class);
-            if (error == null) {
-                throw new ResponseException("Request failed.");
+            if (error != null && error.get("message") != null) {
+                message = error.get("message").toString();
             }
-            throw new ResponseException((String) error.get("message"));
+            throw new ResponseException(message);
         }
         if (responseClass == null) {
             return null;
