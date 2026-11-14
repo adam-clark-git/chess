@@ -16,7 +16,7 @@ import java.util.Map;
 public class ServerFacade {
     private final String serverUrl;
     private final Gson gson = new Gson();
-    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final HttpClient CLIENT = HttpClient.newHttpClient();
     public ServerFacade(int port) {
         serverUrl = "http://localhost:" + port;
     }
@@ -69,7 +69,7 @@ public class ServerFacade {
             if (authToken != null) {
                 builder.header("authorization", authToken);
             }
-            return client.send(builder.build(), BodyHandlers.ofString());
+            return CLIENT.send(builder.build(), BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             throw new ResponseException("Could not reach the server.");
         }
