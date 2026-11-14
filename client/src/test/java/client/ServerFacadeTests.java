@@ -60,9 +60,6 @@ public class ServerFacadeTests {
     void logoutNegative() throws ResponseException {
         Assertions.assertThrows(ResponseException.class, () -> facade.logout(null));
     }
-    @Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
-    }
+
 
 }
