@@ -46,15 +46,15 @@ public class ServerFacade {
     }
     public CreateGameResult createGame(String authToken, String gameName) throws ResponseException {
         String url = serverUrl + "/game";
-        String body = gson.toJson(new GameRequest(authToken, gameName));
+        String body = gson.toJson(new GameRequest(gameName));
         var result = sendRequest(url, "POST", body, authToken);
         return receiveResponse(result, CreateGameResult.class);
     }
     public void joinGame(String authToken, ChessGame.TeamColor playerColor, int gameID) throws ResponseException {
         String url = serverUrl + "/game";
-        String body = gson.toJson(new JoinGameRequest(authToken, playerColor, gameID));
+        String body = gson.toJson(new JoinGameRequest(playerColor, gameID));
         var result = sendRequest(url, "PUT", body, authToken);
-        receiveResponse(result, CreateGameResult.class);
+        receiveResponse(result, null);
     }
 
     private static HttpResponse<String> sendRequest(String url, String method, String body, String authToken)
@@ -91,7 +91,6 @@ public class ServerFacade {
         if (responseClass == null) {
             return null;
         }
-        var responseBody = gson.fromJson(response.body(), responseClass);
-        return responseBody;
+        return gson.fromJson(response.body(), responseClass);
     }
 }
